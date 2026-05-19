@@ -2,7 +2,11 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import register from '@/views/register.vue'
 import login from '@/views/login.vue'
-import profile from '@/views/Profile/profile.vue'
+import profile from '@/views/Profile.vue'
+import DetailPage from '../components/DetailPage.vue'
+
+
+
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -50,6 +54,14 @@ const router = createRouter({
         title: 'Profile',
       },
     },
+    {
+      path:'/detail',
+      name: 'detail',
+      component: () => import('../components/DetailPage.vue'),
+      meta: {
+        title: 'Detail',
+      }
+    }
   ],
 })
 
