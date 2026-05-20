@@ -5,7 +5,6 @@ import login from "@/views/login.vue";
 import profile from "@/views/Profile.vue";
 import DetailPage from "../components/DetailPage.vue";
 
-import profile from "@/views/Profile/profile.vue";
 import { useauthStore } from "@/stores/auth";
 
 const router = createRouter({
