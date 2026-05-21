@@ -6,6 +6,13 @@ import profile from "@/views/Profile.vue";
 import DetailPage from "../components/DetailPage.vue";
 
 import { useauthStore } from "@/stores/auth";
+// import { createRouter, createWebHistory } from 'vue-router'
+// import HomeView from '../views/HomeView.vue'
+// import register from '@/views/register.vue'
+// import login from '@/views/login.vue'
+// import profile from '@/views/Profile/profile.vue'
+// import { useauthStore } from '@/stores/auth'
+import forgotpassword from '@/views/forgotPassword/forgotPassword.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -59,6 +66,13 @@ const router = createRouter({
       component: DetailPage,
       meta: {
         title: "Detail",
+      },
+    },{
+      path: "/forgot-password",
+      name: "forgot-password",
+      component: forgotpassword,
+      meta: {
+        title: "Forgot Password",
       },
     },
   ],
