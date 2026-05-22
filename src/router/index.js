@@ -2,11 +2,15 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import register from '@/views/register.vue'
 import login from '@/views/login.vue'
+
+
 import profile from '@/views/Profile/profile.vue'
 import forgotPassword from '@/views/forgotPassword/forgotpassword.vue'
 import verityOtp from '@/views/forgotPassword/verityOtp.vue'
 import resetpassword from '@/views/forgotPassword/resetpassword.vue'
 import { useauthStore } from '@/stores/auth'
+
+
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
