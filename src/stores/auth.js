@@ -4,9 +4,14 @@ import axios from 'axios'
 import api from '@/API/api'
 
 export const useauthStore = defineStore('auth', () => {
+<<<<<<< HEAD
   const token = ref(localStorage.getItem('token') || null)
   const errMassage = ref('');
 
+=======
+  let token = ref(localStorage.getItem('token') || null)
+  let success = ref(null)
+>>>>>>> 62109b6101cc6b2dbea1216e1a6679d8b4217983
   const login = async (data) =>{
     console.log(data);
     try{
@@ -43,6 +48,24 @@ export const useauthStore = defineStore('auth', () => {
     }
     
   }
+<<<<<<< HEAD
   
   return {login, token, register};
+=======
+
+  const register = async (data) =>{
+    console.log(data);
+    try{
+      let res =await api.post('/api/register' ,data);
+      success.value = res.status;
+      console.log(res);
+      token.value = res.data.data.token;
+      localStorage.setItem('token', token.value)
+    }catch(err){
+      console.error(err.response);
+    }
+    
+  }
+  return {login, token, register, success};
+>>>>>>> 62109b6101cc6b2dbea1216e1a6679d8b4217983
 })
