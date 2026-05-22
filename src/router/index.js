@@ -2,9 +2,15 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import register from '@/views/register.vue'
 import login from '@/views/login.vue'
+
+
 import profile from '@/views/Profile/profile.vue'
+import forgotPassword from '@/views/forgotPassword/forgotpassword.vue'
+import verityOtp from '@/views/forgotPassword/verityOtp.vue'
+import resetpassword from '@/views/forgotPassword/resetpassword.vue'
 import { useauthStore } from '@/stores/auth'
-import forgotpassword from '@/views/forgotPassword/forgotPassword.vue'
+
+
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -54,11 +60,29 @@ const router = createRouter({
     },
 
     {
-      path: "/forgot-password",
-      name: "forgot-password",
-      component: forgotpassword,
+      path: "/forgotpassword",
+      name: "forgotPassword",
+      component: forgotPassword,
       meta: {
-        title: "Forgot Password",
+        title: "forgot-Password",
+      },
+    },
+
+    {
+      path: "/verityOtp",
+      name: "verityOtp",
+      component: verityOtp,
+      meta: {
+        title: "Verity-Otp",
+      },
+    },
+
+    {
+      path: "/resetpassword",
+      name: "resetpassword",
+      component: resetpassword,
+      meta: {
+        title: "Reset-Password",
       },
     },
   ],
@@ -67,9 +91,9 @@ const router = createRouter({
 router.beforeEach((to)=>{
   const auth = useauthStore()
   document.title = to.meta.title
-  if(!auth.token && to.path !== '/login'){
-    return '/login'
-  }
+  // if(!auth.token && to.path !== '/login'){
+  //   return '/login'
+  // }
   if(auth.token && to.path == '/login'){
     return '/'
   }
