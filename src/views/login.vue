@@ -40,8 +40,6 @@
                     បង្កើតគណនី
                     </router-link>
                 </div>
-                <!-- <router-link to="/register" class="text-center text-dark">មិនមានគណនី?<span class=" text-primary">បង្កើតគណនី</span> </router-link> -->
->>>>>>> 44c14119ec913fa12603bab1f71e5bd186598c15
             </form>
         </div>
     </div>

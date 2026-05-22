@@ -74,13 +74,11 @@ const router = createRouter({
       meta: {
         title: "Detail",
       },
-    },{
+    },
+    {
       path: "/forgot-password",
       name: "forgot-password",
       component: forgotpassword,
-      path: "/forgotpassword",
-      name: "forgotPassword",
-      component: forgotPassword,
       meta: {
         title: "forgot-Password",
       },
@@ -106,28 +104,6 @@ const router = createRouter({
   ],
 });
 
-<<<<<<< HEAD
-router.beforeEach((to) => {
-  const auth = useauthStore();
-  document.title = to.meta.title;
-  if (!auth.token && to.path !== "/login") {
-    return "/login";
-  }
-  if (auth.token && to.path == "/login") {
-    return "/";
-    router.beforeEach((to)=>{
-      const auth = useauthStore()
-      document.title = to.meta.title
-      // if(!auth.token && to.path !== '/login'){
-      //   return '/login'
-      // }
-      if(auth.token && to.path == '/login'){
-        return '/'
-      }
-      return true;
-    });
-  }});
-=======
 router.beforeEach((to)=>{
   const auth = useauthStore()
   document.title = to.meta.title
@@ -140,5 +116,4 @@ router.beforeEach((to)=>{
   // return true
 
 })
->>>>>>> 62109b6101cc6b2dbea1216e1a6679d8b4217983
 export default router;

@@ -109,11 +109,7 @@
           <label class="checkbox-label">
             <input
               type="checkbox"
-<<<<<<< HEAD
-              v-model="acceptTerms.acceptTerms"
-=======
               v-model="formaccept.acceptTerms"
->>>>>>> 62109b6101cc6b2dbea1216e1a6679d8b4217983
               :disabled="loading"
             />
             <span>ខ្ញុំយល់ព្រមតាម</span>
@@ -122,15 +118,9 @@
             >
             <span>របស់គេហទំព័រ</span>
           </label>
-<<<<<<< HEAD
-          <span v-if="errorsacceptTerms.acceptTerms" class="error-message terms-error">
-            <i class="bi bi-exclamation-circle-fill"></i>
-            {{ errorsacceptTerms.acceptTerms }}
-=======
           <span v-if="errors.acceptTerms" class="error-message terms-error">
             <i class="bi bi-exclamation-circle-fill"></i>
             {{ errorsaccept.acceptTerms }}
->>>>>>> 62109b6101cc6b2dbea1216e1a6679d8b4217983
           </span>
         </div>
 
@@ -143,11 +133,7 @@
 
         <div class="signin-link">
           <span>មានគណនីរួចហើយ?</span>
-<<<<<<< HEAD
           <RouterLink to="/login">ចូលគណនី</RouterLink>
-=======
-          <RouterLink to="/login" >ចូលគណនី</RouterLink>
->>>>>>> 62109b6101cc6b2dbea1216e1a6679d8b4217983
         </div>
       </form>
     </div>
@@ -190,10 +176,6 @@ import { useRouter } from 'vue-router'
 
 const auth = useauthStore()
 const router = useRouter()
-<<<<<<< HEAD
-
-=======
->>>>>>> 62109b6101cc6b2dbea1216e1a6679d8b4217983
 const loading = ref(false)
 const passwordVisible = ref(false)
 const confirmVisible = ref(false)
@@ -205,11 +187,6 @@ const form = reactive({
   password: '',
   password_confirmation: '',
 })
-
-<<<<<<< HEAD
-=======
-
->>>>>>> 62109b6101cc6b2dbea1216e1a6679d8b4217983
 const errors = reactive({
   name: '',
   email: '',
@@ -217,21 +194,13 @@ const errors = reactive({
   password_confirmation: '',
 })
 
-<<<<<<< HEAD
-const acceptTerms = reactive({
-  acceptTerms: '',
-})
 
-const errorsacceptTerms= reactive({
-  acceptTerms: '',
-=======
 const formaccept = reactive({
   acceptTerms: false
 })
 
 const errorsaccept = reactive({
   acceptTerms: ''
->>>>>>> 62109b6101cc6b2dbea1216e1a6679d8b4217983
 })
 
 const toast = reactive({
@@ -298,16 +267,7 @@ const validateForm = () => {
   validateField('email')
   validateField('password')
   validateField('password_confirmation')
-  
-<<<<<<< HEAD
-  if (!acceptTerms.acceptTerms) {
-    errorsacceptTerms.acceptTerms = 'សូមយល់ព្រមតាមលក្ខខណ្ឌប្រើប្រាស់'
-  } else {
-    errorsacceptTerms.acceptTerms = ''
-  }
-  
-  return !errors.name && !errors.email && !errors.password && !errors.password_confirmation && !errorsacceptTerms.acceptTerms
-=======
+
   if (!formaccept.acceptTerms) {
     errorsaccept.acceptTerms = 'សូមយល់ព្រមតាមលក្ខខណ្ឌប្រើប្រាស់'
   } else {
@@ -315,7 +275,6 @@ const validateForm = () => {
   }
   
   return !errors.name && !errors.email && !errors.password && !errors.password_confirmation && !errorsaccept.acceptTerms
->>>>>>> 62109b6101cc6b2dbea1216e1a6679d8b4217983
 }
 
 const handleSignup = async () => {
@@ -326,11 +285,26 @@ const handleSignup = async () => {
   
   loading.value = true
 
-<<<<<<< HEAD
   const success = await auth.register(form)
   if (success) {
       alertSuccess('គណនីត្រូវបានបង្កើតដោយជោគជ័យ!')
       router.push('/login');
+  }
+  try {
+    await auth.register(form);
+    // console.log(auth.success);
+    
+    if (auth.success) {
+      showToast('គណនីត្រូវបានបង្កើតដោយជោគជ័យ', 'success')
+      router.push('/login')
+    } else {
+      showToast('មិនអាចបង្កើតគណនីបានទេ សូមព្យាយាមម្តងទៀត', 'error')
+    }
+  } catch (error) {
+    console.error('Signup error:', error)
+    showToast('កំហុសក្នុងការភ្ជាប់ប្រព័ន្ធ សូមព្យាយាមម្តងទៀត', 'error')
+  } finally {
+    loading.value = false 
   }
   
   // try {
@@ -348,22 +322,6 @@ const handleSignup = async () => {
   //   loading.value = false
   // }
 
-  try {
-    await auth.register(form);
-    // console.log(auth.success);
-    
-    if (auth.success) {
-      showToast('គណនីត្រូវបានបង្កើតដោយជោគជ័យ', 'success')
-      router.push('/login')
-    } else {
-      showToast('មិនអាចបង្កើតគណនីបានទេ សូមព្យាយាមម្តងទៀត', 'error')
-    }
-  } catch (error) {
-    console.error('Signup error:', error)
-    showToast('កំហុសក្នុងការភ្ជាប់ប្រព័ន្ធ សូមព្យាយាមម្តងទៀត', 'error')
-  } finally {
-    loading.value = false 
-  }
 }
 </script>
 
