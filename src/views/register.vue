@@ -133,7 +133,7 @@
 
         <div class="signin-link">
           <span>មានគណនីរួចហើយ?</span>
-          <RouterLink to="/login">ចូលគណនី</RouterLink>
+          <RouterLink to="/login" >ចូលគណនី</RouterLink>
         </div>
       </form>
     </div>
@@ -288,7 +288,7 @@ const handleSignup = async () => {
 
   try {
     await auth.register(form);
-    console.log(auth.success);
+    // console.log(auth.success);
     
     if (auth.success) {
       showToast('គណនីត្រូវបានបង្កើតដោយជោគជ័យ', 'success')
@@ -506,13 +506,15 @@ const handleSignup = async () => {
 }
 
 .submit-btn {
-  background: #0f2b3d;
+  /* background: #0f2b3d; */
+  background-color: #0d6efd;
+  border-color: #0d6efd;
   color: white;
   font-weight: 600;
   font-size: 0.95rem;
   padding: 0.9rem;
   border: none;
-  border-radius: 40px;
+  border-radius: 10px;
   cursor: pointer;
   transition: background 0.2s ease;
   gap: 0.75rem;
@@ -524,7 +526,10 @@ const handleSignup = async () => {
 }
 
 .submit-btn:hover:not(:disabled) {
-  background: #1e3a5f;
+  /* background: #1e3a5f; */
+  background-color: #0b5ed7;
+  border-color: #0a58ca;
+  color: white;
 }
 
 .submit-btn:active:not(:disabled) {
@@ -653,16 +658,17 @@ const handleSignup = async () => {
 }
 
 .toast {
+  width: 300px;
   position: fixed;
   bottom: 20px;
   left: 88%;
   transform: translateX(-50%);
-  padding: 10px 20px 10px 35px;
+  padding: 10px 20px 10px 55px;
   border-radius: 50px;
   color: white;
   display: flex;
   align-items: center;
-  gap: 0.6rem;
+  gap: 0.2rem;
   z-index: 1100;
   animation: fadeInUp 0.2s ease-out;
   font-family: "Kantumruy Pro", sans-serif;
