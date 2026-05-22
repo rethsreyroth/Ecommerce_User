@@ -1,19 +1,17 @@
+
 import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "../views/HomeView.vue";
 import register from "@/views/register.vue";
 import login from "@/views/login.vue";
-import profile from "@/views/Profile.vue";
 import DetailPage from "../components/DetailPage.vue";
 import Checkout from "@/views/Checkout.vue";
 import Success from "@/views/Success.vue";
 import { useauthStore } from "@/stores/auth";
-// import { createRouter, createWebHistory } from 'vue-router'
-// import HomeView from '../views/HomeView.vue'
-// import register from '@/views/register.vue'
-// import login from '@/views/login.vue'
-// import profile from '@/views/Profile/profile.vue'
-// import { useauthStore } from '@/stores/auth'
-import forgotpassword from "@/views/forgotPassword/forgotPassword.vue";
+import forgotpassword from '@/views/forgotPass/forgotpassword.vue'
+import resetpassword from '@/views/forgotPass/resetpassword.vue'
+import verityOtp from '@/views/forgotPass/verityOtp.vue'
+import profile from '@/views/Profile.vue'
+
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -86,11 +84,29 @@ const router = createRouter({
       },
     },
     {
-      path: "/forgot-password",
-      name: "forgot-password",
+      path: "/forgotpassword",
+      name: "forgotPassword",
       component: forgotpassword,
       meta: {
-        title: "Forgot Password",
+        title: "forgot-Password",
+      },
+    },
+
+    {
+      path: "/verityOtp",
+      name: "verityOtp",
+      component: verityOtp,
+      meta: {
+        title: "Verity-Otp",
+      },
+    },
+
+    {
+      path: "/resetpassword",
+      name: "resetpassword",
+      component: resetpassword,
+      meta: {
+        title: "Reset-Password",
       },
     },
   ],
@@ -104,7 +120,16 @@ router.beforeEach((to) => {
   }
   if (auth.token && to.path == "/login") {
     return "/";
-  }
-  return true;
-});
+    router.beforeEach((to)=>{
+      const auth = useauthStore()
+      document.title = to.meta.title
+      // if(!auth.token && to.path !== '/login'){
+      //   return '/login'
+      // }
+      if(auth.token && to.path == '/login'){
+        return '/'
+      }
+      return true;
+    });
+  }});
 export default router;
