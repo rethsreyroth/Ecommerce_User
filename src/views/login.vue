@@ -38,9 +38,9 @@
                 </div>
                 <div class="text-center">
                     មិនទាន់មានគណនី?
-                    <a href="#" class="text-decoration-none fw-semibold">
+                    <router-link to="/register" class="text-decoration-none fw-semibold">
                     បង្កើតគណនី
-                    </a>
+                    </router-link>
                 </div>
             </form>
         </div>
@@ -85,8 +85,5 @@
             await auth.login(form);
             router.push('/');
     }
-    
-    
-
 
 </script>
