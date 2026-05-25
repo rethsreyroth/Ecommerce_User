@@ -2,17 +2,13 @@
 import { ref, reactive } from "vue";
 import api from "@/API/api";
 
-// =======================
 // SHOW / HIDE PASSWORD
-// =======================
 
 const showOldPassword = ref(false);
 const showNewPassword = ref(false);
 const showConfirmPassword = ref(false);
 
-// =======================
 // LOADING
-// =======================
 
 const loading = ref(false);
 

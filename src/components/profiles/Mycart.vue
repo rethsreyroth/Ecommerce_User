@@ -116,17 +116,17 @@ onMounted(() => {
     ========================== -->
 
     <!-- skeleton header -->
-    <div
+    <!-- <div
       v-if="loading"
       class="d-flex justify-content-between align-items-center mb-4"
     >
       <div class="skeleton skeleton-title"></div>
 
       <div class="skeleton skeleton-btn"></div>
-    </div>
+    </div> -->
 
     <!-- real header -->
-    <div v-else class="d-flex justify-content-between align-items-center mb-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
       <h4>របស់ខ្ញុំ</h4>
 
       <button @click="checkout" class="btn btn-success">ទូទាត់ប្រាក់</button>
@@ -161,7 +161,7 @@ onMounted(() => {
           ========================== -->
 
           <template v-if="loading">
-            <tr v-for="n in 3" :key="n">
+            <tr v-for="n in 5" :key="n">
               <td>
                 <div class="skeleton skeleton-check"></div>
               </td>
@@ -206,7 +206,7 @@ onMounted(() => {
 
           <tr v-else-if="cartItems.length === 0">
             <td colspan="8" class="text-center text-muted py-5">
-              No Cart Items
+              គ្មានផលិតផលនៅក្នុងរទេះទិញទេ។
             </td>
           </tr>
 
@@ -262,50 +262,11 @@ onMounted(() => {
                 @click="removeCart(item.id)"
                 class="btn btn-danger btn-sm"
               >
-                Remove
+                លុប
               </button>
             </td>
           </tr>
-          <tr>
-            <!-- checkbox -->
-            <td>
-              <input type="checkbox" />
-            </td>
-
-            <!-- image -->
-            <td>
-              <img
-                src="https://i.pinimg.com/736x/a8/5c/d6/a85cd6f4555a80585e33e333523acf79.jpg"
-                class="product-img"
-              />
-            </td>
-
-            <!-- title -->
-            <td>MacBook Pro M3</td>
-
-            <!-- categories -->
-            <td>
-              <span class="badge bg-primary me-1"> Electronics </span>
-
-              <span class="badge bg-dark"> Laptop </span>
-            </td>
-
-            <!-- price -->
-            <td>$1200</td>
-
-            <!-- qty -->
-            <td>2</td>
-
-            <!-- total -->
-            <td>
-              <span class="text-success fw-bold"> $2400 </span>
-            </td>
-
-            <!-- action -->
-            <td>
-              <button class="btn btn-danger btn-sm">Remove</button>
-            </td>
-          </tr>
+          
         </tbody>
       </table>
     </div>

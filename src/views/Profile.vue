@@ -331,9 +331,28 @@ onMounted(() => {
         <!-- CONTENT -->
         <div class="col-lg-9 p-4">
           <!-- PROFILE -->
+
           <section v-if="activeSection === 'profile'">
             <div class="card card-ui p-4">
+              <!-- =========================
+         HEADER SKELETON
+    ========================== -->
+
               <div
+                v-if="loading"
+                class="d-flex justify-content-between align-items-center mb-4"
+              >
+                <div class="skeleton skeleton-title"></div>
+
+                <div class="skeleton skeleton-btn"></div>
+              </div>
+
+              <!-- =========================
+         REAL HEADER
+    ========================== -->
+
+              <div
+                v-else
                 class="d-flex justify-content-between align-items-center mb-4"
               >
                 <h4>ប្រវត្តិរូប</h4>
@@ -343,16 +362,70 @@ onMounted(() => {
                   class="btn btn-primary"
                   :disabled="loading"
                 >
-                  {{ loading ? "កំពុងផ្ទុក..." : "រក្សាទុក" }}
+                  រក្សាទុក
                 </button>
               </div>
 
-              <!-- success -->
-              <!-- <div v-if="successMessage" class="alert alert-success">
-              {{ successMessage }}
-            </div> -->
+              <!-- =========================
+         SKELETON BODY
+    ========================== -->
 
-              <div class="row">
+              <div v-if="loading" class="row">
+                <!-- name -->
+                <div class="col-md-6 mb-3">
+                  <div class="skeleton skeleton-label mb-2"></div>
+
+                  <div class="skeleton skeleton-input"></div>
+                </div>
+
+                <!-- email -->
+                <div class="col-md-6 mb-3">
+                  <div class="skeleton skeleton-label mb-2"></div>
+
+                  <div class="skeleton skeleton-input"></div>
+                </div>
+
+                <!-- phone -->
+                <div class="col-md-6 mb-3">
+                  <div class="skeleton skeleton-label mb-2"></div>
+
+                  <div class="skeleton skeleton-input"></div>
+                </div>
+
+                <!-- location -->
+                <div class="col-md-6 mb-3">
+                  <div class="skeleton skeleton-label mb-2"></div>
+
+                  <div class="skeleton skeleton-input"></div>
+                </div>
+
+                <!-- created at -->
+                <div class="col-12 mb-3">
+                  <div class="skeleton skeleton-label mb-2"></div>
+
+                  <div class="skeleton skeleton-input"></div>
+                </div>
+
+                <!-- image -->
+                <div class="col-12 mb-3">
+                  <div class="skeleton skeleton-label mb-2"></div>
+
+                  <div class="skeleton skeleton-input"></div>
+                </div>
+
+                <!-- buttons -->
+                <div class="d-flex gap-3 mt-3">
+                  <div class="skeleton skeleton-btn"></div>
+
+                  <div class="skeleton skeleton-btn"></div>
+                </div>
+              </div>
+
+              <!-- =========================
+         REAL FORM
+    ========================== -->
+
+              <div v-else class="row">
                 <!-- name -->
                 <div class="col-md-6 mb-3">
                   <label> ឈ្មោះ </label>
@@ -425,22 +498,17 @@ onMounted(() => {
                   />
                 </div>
 
+                <!-- buttons -->
                 <div
                   class="d-flex justify-content-start gap-3 align-items-center"
                 >
-                  <!-- upload button -->
-                  <div class="">
-                    <button @click="updateProfileImage" class="btn btn-success">
-                      Upload Image
-                    </button>
-                  </div>
+                  <button @click="updateProfileImage" class="btn btn-success">
+                    Upload Image
+                  </button>
 
-                  <!-- delete account -->
-                  <div class="">
-                    <button @click="deleteAccount" class="btn btn-danger">
-                      លុបគណនី
-                    </button>
-                  </div>
+                  <button @click="deleteAccount" class="btn btn-danger">
+                    លុបគណនី
+                  </button>
                 </div>
               </div>
             </div>
@@ -515,5 +583,60 @@ body {
   border: none;
   border-radius: 20px;
   box-shadow: 0 3px 15px rgba(0, 0, 0, 0.05);
+}
+
+/* =========================
+   SKELETON
+========================= */
+
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  background: #e9ecef;
+  border-radius: 10px;
+}
+
+.skeleton::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -150px;
+  width: 150px;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.6),
+    transparent
+  );
+  animation: shimmer 1.2s infinite;
+}
+
+.skeleton-title {
+  width: 180px;
+  height: 32px;
+}
+
+.skeleton-btn {
+  width: 140px;
+  height: 42px;
+  border-radius: 12px;
+}
+
+.skeleton-label {
+  width: 100px;
+  height: 16px;
+}
+
+.skeleton-input {
+  width: 100%;
+  height: 42px;
+  border-radius: 10px;
+}
+
+@keyframes shimmer {
+  100% {
+    left: 100%;
+  }
 }
 </style>
