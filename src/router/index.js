@@ -5,14 +5,9 @@ import register from "@/views/register.vue";
 import login from "@/views/login.vue";
 import profile from "@/views/Profile.vue";
 import DetailPage from "../components/DetailPage.vue";
-
 import { useauthStore } from "@/stores/auth";
 import forgotpassword from '@/views/forgotPass/forgotpassword.vue'
 import resetpassword from '@/views/forgotPass/resetpassword.vue'
-
-
-
-// import profile from '@/views/Profile/profile.vue'
 import verityOtp from '@/views/forgotPass/verityOtp.vue'
 // import resetpassword from '@/views/forgotPassword/resetpassword.vue'
 // import resetPassword from '@/views/forgotPassword/resetPassword.vue'
@@ -38,6 +33,16 @@ const router = createRouter({
       component: () => import("../views/AboutView.vue"),
       meta: {
         title: "About",
+      },
+    },{
+      path: '/contactUS',
+      name: 'contactUS',
+      // route level code-splitting
+      // this generates a separate chunk (About.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('../views/AboutView.vue'),
+      meta: {
+        title: 'contactUS',
       },
     },
     {
@@ -102,15 +107,17 @@ const router = createRouter({
 });
 
 router.beforeEach((to)=>{
-  const auth = useauthStore()
+  // const auth = useauthStore()
   document.title = to.meta.title
-  // if(!auth.token && to.path !== '/login'){
-  //   return '/login'
-  // }
-  // if(auth.token && to.path == '/login'){
-  //   return '/'
-  // }
-  // return true
-
+  router.beforeEach((to, from) => {
+  let auth = useauthStore();
+  if(!auth.success && !to.path == '/login'){
+    return {name : 'login'}
+  }
+  if(auth.success && to.path == '/login'){
+    return '/'
+  }
+  return true;
+})
 })
 export default router;
