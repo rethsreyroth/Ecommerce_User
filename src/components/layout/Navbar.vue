@@ -28,6 +28,7 @@
                         
                         <router-link to="/profile" class="text-dark fs-5"><i class="bi bi-person"></i></router-link>
                         
+                        <router-link to="/profile" class="text-dark fs-5"><i class="bi bi-person"></i></router-link>
                     </li>
                 </ul>
             </div>
