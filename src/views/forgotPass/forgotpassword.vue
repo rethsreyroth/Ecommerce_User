@@ -1,4 +1,4 @@
-​
+
 <template>
   <div class="forgot-wrapper">
     <!-- Background -->

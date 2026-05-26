@@ -269,10 +269,10 @@ const submitForm = async () => {
     /* RESET FORM */
     password.value = "";
     confirmPassword.value = "";
+    router.push("/login");
     /* GO LOGIN */
-    setTimeout(() => {
-      router.push("/login");
-    }, 2000);
+    // setTimeout(() => {
+    // }, 2000);
   } catch (err) {
     console.log(err);
     // Timeout
