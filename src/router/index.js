@@ -26,6 +26,16 @@ const router = createRouter({
       meta: {
         title: 'About',
       },
+    },{
+      path: '/contactUS',
+      name: 'contactUS',
+      // route level code-splitting
+      // this generates a separate chunk (About.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('../views/AboutView.vue'),
+      meta: {
+        title: 'contactUS',
+      },
     },
     {
       path: '/register',
@@ -55,15 +65,17 @@ const router = createRouter({
 })
 
 router.beforeEach((to)=>{
-  const auth = useauthStore()
+  // const auth = useauthStore()
   document.title = to.meta.title
-  // if(!auth.token && to.path !== '/login'){
-  //   return '/login'
-  // }
-  // if(auth.token && to.path == '/login'){
-  //   return '/'
-  // }
-  // return true
-
+  router.beforeEach((to, from) => {
+  let auth = useauthStore();
+  if(!auth.success && !to.path == '/login'){
+    return {name : 'login'}
+  }
+  if(auth.success && to.path == '/login'){
+    return '/'
+  }
+  return true;
+})
 })
 export default router;
