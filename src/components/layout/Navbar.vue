@@ -28,7 +28,6 @@
                     <li class="nav-item"><router-link to="/profile" class="nav-link p-1"><i class="bi bi-person fs-5"></i></router-link></li>
                 </ul>
             </div>
-
         </div>
     </nav>
 
