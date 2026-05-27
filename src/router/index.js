@@ -9,6 +9,7 @@ import { useauthStore } from "@/stores/auth";
 import forgotpassword from '@/views/forgotPass/forgotpassword.vue'
 import resetpassword from '@/views/forgotPass/resetpassword.vue'
 import verityOtp from '@/views/forgotPass/verityOtp.vue'
+import Shop from '@/views/shop/shopPage.vue'
 // import resetpassword from '@/views/forgotPassword/resetpassword.vue'
 // import resetPassword from '@/views/forgotPassword/resetPassword.vue'
 
@@ -101,6 +102,14 @@ const router = createRouter({
       component: resetpassword,
       meta: {
         title: "Reset-Password",
+      },
+    },
+    {
+      path: "/shop-page",
+      name: "shop",
+      component: Shop,
+      meta: {
+        title: "shop",
       },
     },
   ],

@@ -61,7 +61,6 @@
 
               <div>
                 <h6 class="fw-bold mb-1">Sreng menghlin</h6>
-
                 <small class="text-muted d-block"> srengmenghlin@gmail.com </small>
 
                 <small class="text-muted"> 2026-05-07 </small>

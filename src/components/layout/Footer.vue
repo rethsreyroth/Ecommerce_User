@@ -27,9 +27,9 @@
                 <div class="col-md-4 col-lg-3">
                     <h6 class="fw-bold text-dark mb-3">Follow us</h6>
                     <div class="d-flex gap-3">
-                        <router-link to="anttraining2023@gmail.com" class="text-dark fs-5"><i class="bi bi-facebook"></i></router-link>
-                        <router-link to="anttraining2023@gmail.com" class="text-dark fs-5"><i class="bi bi-youtube"></i></router-link>
-                        <router-link to="/" class="text-dark fs-5"><i class="bi bi-instagram"></i></router-link>
+                        <a href="https://www.facebook.com/anttraining" target="_blank" class="text-dark fs-5"><i class="bi bi-facebook"></i></a>
+                        <a href="https://www.youtube.com/anttraining" target="_blank" class="text-dark fs-5"><i class="bi bi-youtube"></i></a>
+                        <a href="https://www.instagram.com/anttraining" target="_blank  " class="text-dark fs-5"><i class="bi bi-instagram"></i></a>
                     </div>
                 </div>
             </div>

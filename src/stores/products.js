@@ -15,6 +15,7 @@ export const useProductStore = defineStore('product', () => {
         }
         let res = await api.get(url);
         products.value = res.data?.data;
+        console.log(products.value);
     }
 
     // async function fetchSearchProduct(params = {}) {
