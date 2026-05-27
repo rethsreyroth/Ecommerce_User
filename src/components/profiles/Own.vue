@@ -2,12 +2,15 @@
 import { ref, reactive, onMounted } from "vue";
 import api from "@/API/api";
 
-// ==============================
+// =====================================
 // STATES
-// ==============================
+// =====================================
 
 const products = ref([]);
+const categories = ref([]);
+
 const loading = ref(false);
+const categoryLoading = ref(false);
 
 const showModal = ref(false);
 const isEdit = ref(false);
@@ -18,9 +21,9 @@ const saving = ref(false);
 
 const imagePreview = ref("");
 
-// ==============================
+// =====================================
 // FORM
-// ==============================
+// =====================================
 
 const form = reactive({
   title: "",
@@ -29,26 +32,26 @@ const form = reactive({
   description: "",
   detail: "",
   story: "",
-  category_id: "",
+  category_ids: [""],
   image: null,
 });
 
-// ==============================
+// =====================================
 // ERRORS
-// ==============================
+// =====================================
 
 const errors = reactive({
   title: "",
   price: "",
   condition: "",
   description: "",
-  category_id: "",
+  category_ids: "",
   image: "",
 });
 
-// ==============================
+// =====================================
 // FORMAT DATE
-// ==============================
+// =====================================
 
 const formatDate = (date) => {
   if (!date) return "-";
@@ -60,9 +63,9 @@ const formatDate = (date) => {
   });
 };
 
-// ==============================
+// =====================================
 // GET PRODUCTS
-// ==============================
+// =====================================
 
 const getProducts = async () => {
   try {
@@ -70,7 +73,7 @@ const getProducts = async () => {
 
     const response = await api.get("/api/profile/products?page=1&per_page=20");
 
-    console.log(response.data);
+    console.log("PRODUCTS:", response.data);
 
     products.value = response.data.data || [];
   } catch (error) {
@@ -82,9 +85,31 @@ const getProducts = async () => {
   }
 };
 
-// ==============================
+// =====================================
+// GET CATEGORIES
+// =====================================
+
+const getCategories = async () => {
+  try {
+    categoryLoading.value = true;
+
+    const response = await api.get("/api/categories");
+
+    console.log("CATEGORIES:", response.data);
+
+    categories.value = response.data.data || [];
+  } catch (error) {
+    console.log(error);
+
+    alert(error.response?.data?.message || "Get Categories Failed");
+  } finally {
+    categoryLoading.value = false;
+  }
+};
+
+// =====================================
 // VALIDATE FORM
-// ==============================
+// =====================================
 
 const validateForm = () => {
   let isValid = true;
@@ -94,7 +119,7 @@ const validateForm = () => {
   errors.price = "";
   errors.condition = "";
   errors.description = "";
-  errors.category_id = "";
+  errors.category_ids = "";
   errors.image = "";
 
   // title
@@ -122,17 +147,23 @@ const validateForm = () => {
   }
 
   // category
-  if (!form.category_id) {
-    errors.category_id = "Category ID is required";
+  if (!form.category_ids[0]) {
+    errors.category_ids = "Category is required";
+    isValid = false;
+  }
+
+  // image
+  if (!isEdit.value && !form.image) {
+    errors.image = "Image is required";
     isValid = false;
   }
 
   return isValid;
 };
 
-// ==============================
+// =====================================
 // HANDLE IMAGE
-// ==============================
+// =====================================
 
 const handleImage = (event) => {
   const file = event.target.files[0];
@@ -144,9 +175,9 @@ const handleImage = (event) => {
   imagePreview.value = URL.createObjectURL(file);
 };
 
-// ==============================
+// =====================================
 // RESET FORM
-// ==============================
+// =====================================
 
 const resetForm = () => {
   form.title = "";
@@ -155,7 +186,7 @@ const resetForm = () => {
   form.description = "";
   form.detail = "";
   form.story = "";
-  form.category_id = "";
+  form.category_ids = [""];
   form.image = null;
 
   imagePreview.value = "";
@@ -164,13 +195,13 @@ const resetForm = () => {
   errors.price = "";
   errors.condition = "";
   errors.description = "";
-  errors.category_id = "";
+  errors.category_ids = "";
   errors.image = "";
 };
 
-// ==============================
+// =====================================
 // OPEN ADD MODAL
-// ==============================
+// =====================================
 
 const openAddModal = () => {
   resetForm();
@@ -182,9 +213,9 @@ const openAddModal = () => {
   showModal.value = true;
 };
 
-// ==============================
+// =====================================
 // OPEN EDIT MODAL
-// ==============================
+// =====================================
 
 const openEditModal = (product) => {
   resetForm();
@@ -202,20 +233,21 @@ const openEditModal = (product) => {
 
   // category
   if (product.categories?.length > 0) {
-    form.category_id = product.categories[0].id;
+    // form.category_ids = [String(product.categories[0].id)];
+    form.category_ids = [product.categories[0].id];
   }
 
+  // image preview
   imagePreview.value = product.image || "";
 
   showModal.value = true;
 };
 
-// ==============================
+// =====================================
 // SAVE PRODUCT
-// ==============================
+// =====================================
 
 const saveProduct = async () => {
-  // validate
   if (!validateForm()) {
     return;
   }
@@ -231,24 +263,30 @@ const saveProduct = async () => {
     formData.append("description", form.description);
     formData.append("detail", form.detail);
     formData.append("story", form.story);
-    formData.append("category_id", form.category_id);
 
+    // category_ids
+    formData.append(
+      "category_ids",
+      JSON.stringify([Number(form.category_ids[0])]),
+    );
+
+    
     // image
     if (form.image) {
       formData.append("image", form.image);
     }
 
+    // debug
+    console.log([...formData.entries()]);
+
     let response;
 
-    // ==========================
+    // =====================================
     // ADD PRODUCT
-    // ==========================
+    // =====================================
 
     if (!isEdit.value) {
-      // IMPORTANT:
-      // Replace endpoint below with your real POST API
-
-      response = await api.post("/api/profile/product/create", formData, {
+      response = await api.post("/api/products", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -257,34 +295,74 @@ const saveProduct = async () => {
       alert(response.data.message || "Add Product Success");
     }
 
-    // ==========================
+    // =====================================
     // UPDATE PRODUCT
-    // ==========================
+    // =====================================
+    // else {
+    //   formData.append("_method", "PUT");
+
+    //   response = await api.post(
+    //     `/api/products/${currentProductId.value}`,
+    //     formData,
+    //     {
+    //       headers: {
+    //         "Content-Type": "multipart/form-data",
+    //       },
+    //     },
+    //   );
+
+    //   alert(response.data.message || "Update Product Success");
+    // }
+
     else {
-      formData.append("_method", "PUT");
 
-      response = await api.post(
-        `/api/profile/product/update/${currentProductId.value}`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        },
-      );
+  const updateData = new FormData();
 
-      alert(response.data.message || "Update Product Success");
+  updateData.append("_method", "PUT");
+
+  updateData.append("title", form.title);
+  updateData.append("price", form.price);
+  updateData.append("condition", form.condition);
+  updateData.append("description", form.description);
+  updateData.append("detail", form.detail);
+  updateData.append("story", form.story);
+
+  // category
+  updateData.append(
+    "category_ids",
+    JSON.stringify(form.category_ids)
+  );
+
+  // image optional
+  if (form.image) {
+    updateData.append("image", form.image);
+  }
+
+  response = await api.post(
+    `/api/products/${currentProductId.value}`,
+    updateData,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
     }
+  );
+
+  alert(
+    response.data.message ||
+    "Update Product Success"
+  );
+}
 
     // close modal
     showModal.value = false;
 
-    // refresh data
+    // refresh
     getProducts();
   } catch (error) {
-    console.log(error);
+    console.log("SAVE ERROR:", error);
 
-    console.log(error.response?.data);
+    console.log("ERROR RESPONSE:", error.response?.data);
 
     // backend validation
     if (error.response?.data?.data) {
@@ -306,8 +384,8 @@ const saveProduct = async () => {
         errors.description = backendErrors.description[0];
       }
 
-      if (backendErrors.category_id) {
-        errors.category_id = backendErrors.category_id[0];
+      if (backendErrors.category_ids) {
+        errors.category_ids = backendErrors.category_ids[0];
       }
 
       if (backendErrors.image) {
@@ -321,19 +399,21 @@ const saveProduct = async () => {
   }
 };
 
-// ==============================
+// =====================================
 // DELETE PRODUCT
-// ==============================
+// =====================================
 
 const deleteProduct = async (id) => {
-  const confirmDelete = confirm("Are you sure delete this product?");
+  const confirmDelete = confirm(
+    "Are you sure you want to delete this product?",
+  );
 
   if (!confirmDelete) {
     return;
   }
 
   try {
-    const response = await api.delete(`/api/profile/product/delete/${id}`);
+    const response = await api.delete(`/api/products/${id}`);
 
     alert(response.data.message || "Delete Successfully");
 
@@ -346,18 +426,20 @@ const deleteProduct = async (id) => {
   }
 };
 
-// ==============================
+// =====================================
 // MOUNTED
-// ==============================
+// =====================================
 
 onMounted(() => {
   getProducts();
+  getCategories();
 });
 </script>
 
 <template>
   <div class="card card-ui p-4">
     <!-- HEADER -->
+
     <div class="d-flex justify-content-between align-items-center mb-4">
       <h4>ផលិតផលរបស់ខ្ញុំ</h4>
 
@@ -366,7 +448,8 @@ onMounted(() => {
       </button>
     </div>
 
-    <!-- LOADING SKELETON -->
+    <!-- LOADING -->
+
     <div v-if="loading">
       <table class="table align-middle">
         <thead>
@@ -382,13 +465,31 @@ onMounted(() => {
         </thead>
 
         <tbody>
-          <tr v-for="i in 5" :key="i">
-            <td><div class="skeleton skeleton-id"></div></td>
-            <td><div class="skeleton skeleton-image"></div></td>
-            <td><div class="skeleton skeleton-text"></div></td>
-            <td><div class="skeleton skeleton-badge"></div></td>
-            <td><div class="skeleton skeleton-price"></div></td>
-            <td><div class="skeleton skeleton-date"></div></td>
+          <tr v-for="i in 6" :key="i">
+            <td>
+              <div class="skeleton skeleton-id"></div>
+            </td>
+
+            <td>
+              <div class="skeleton skeleton-image"></div>
+            </td>
+
+            <td>
+              <div class="skeleton skeleton-text"></div>
+            </td>
+
+            <td>
+              <div class="skeleton skeleton-badge"></div>
+            </td>
+
+            <td>
+              <div class="skeleton skeleton-price"></div>
+            </td>
+
+            <td>
+              <div class="skeleton skeleton-date"></div>
+            </td>
+
             <td>
               <div class="d-flex gap-2">
                 <div class="skeleton skeleton-action"></div>
@@ -400,7 +501,8 @@ onMounted(() => {
       </table>
     </div>
 
-    <!-- REAL TABLE -->
+    <!-- TABLE -->
+
     <div v-else class="table-responsive">
       <table class="table table-hover align-middle">
         <thead>
@@ -416,18 +518,17 @@ onMounted(() => {
         </thead>
 
         <tbody>
-          <!-- EMPTY -->
           <tr v-if="products.length === 0">
             <td colspan="7" class="text-center text-muted py-4">
               គ្មានផលិតផលទេ
             </td>
           </tr>
 
-          <!-- PRODUCTS -->
           <tr v-for="product in products" :key="product.id">
             <td>#{{ product.id }}</td>
 
             <!-- IMAGE -->
+
             <td>
               <img
                 :src="product.image"
@@ -437,9 +538,11 @@ onMounted(() => {
             </td>
 
             <!-- TITLE -->
+
             <td>{{ product.title }}</td>
 
             <!-- CATEGORY -->
+
             <td>
               <span
                 v-for="category in product.categories"
@@ -451,12 +554,17 @@ onMounted(() => {
             </td>
 
             <!-- PRICE -->
+
             <td>${{ product.price }}</td>
 
-            <!-- DATE — FIX: format ISO timestamp -->
-            <td>{{ formatDate(product.created_at) }}</td>
+            <!-- DATE -->
+
+            <td>
+              {{ formatDate(product.created_at) }}
+            </td>
 
             <!-- ACTION -->
+
             <td>
               <div class="d-flex justify-content-center gap-2">
                 <button
@@ -480,13 +588,12 @@ onMounted(() => {
     </div>
   </div>
 
-  <!-- =========================
-        MODAL
-  ========================== -->
+  <!-- MODAL -->
 
   <div v-if="showModal" class="modal-overlay">
     <div class="modal-box">
       <!-- HEADER -->
+
       <div class="d-flex justify-content-between align-items-center mb-4">
         <h4 class="fw-bold">
           {{ isEdit ? "Edit Product" : "Add Product" }}
@@ -496,68 +603,164 @@ onMounted(() => {
       </div>
 
       <!-- TITLE -->
+
       <div class="mb-3">
         <label class="form-label">Product Title</label>
+
         <input
           v-model="form.title"
           type="text"
           class="form-control"
           placeholder="Enter product title"
         />
-        <small class="text-danger">{{ errors.title }}</small>
+
+        <small class="text-danger">
+          {{ errors.title }}
+        </small>
       </div>
 
       <!-- PRICE -->
+
       <div class="mb-3">
         <label class="form-label">Price</label>
+
         <input
           v-model="form.price"
           type="number"
           class="form-control"
           placeholder="Enter price"
         />
-        <small class="text-danger">{{ errors.price }}</small>
+
+        <small class="text-danger">
+          {{ errors.price }}
+        </small>
       </div>
+
+      <!-- CATEGORY SELECT -->
+
+      <!-- <div class="mb-3">
+        <label class="form-label">Category</label>
+
+        <select v-model="form.category_ids" class="form-select" multiple>
+          <option disabled value="">Select category</option>
+
+          <option
+            v-for="category in categories"
+            :key="category.id"
+            :value="String(category.id)"
+          >
+            {{ category.name }}
+          </option>
+        </select>
+
+        <small class="text-danger">
+          {{ errors.category_ids }}
+        </small>
+      </div> -->
+      <!-- CATEGORY -->
+
+      <!-- <div class="mb-3">
+        <label class="form-label">Category</label>
+
+        <select v-model="form.category_ids[0]" class="form-select">
+          <option disabled value="">Select category</option>
+
+          <option
+            v-for="category in categories"
+            :key="category.id"
+            :value="category.id"
+          >
+            {{ category.name }}
+          </option>
+        </select>
+
+        <small class="text-danger">
+          {{ errors.category_ids }}
+        </small>
+      </div> -->
 
       <!-- CATEGORY -->
-      <div class="mb-3">
-        <label class="form-label">Category ID</label>
-        <input
-          v-model="form.category_id"
-          type="number"
-          class="form-control"
-          placeholder="Enter category id"
-        />
-        <small class="text-danger">{{ errors.category_id }}</small>
-      </div>
+
+<div class="mb-3">
+  <label class="form-label">Category</label>
+
+  <!-- <select
+    v-model="form.category_ids[0]"
+    class="form-select"
+  >
+    <option disabled value="">
+      Select category
+    </option>
+
+    <option
+      v-for="category in categories"
+      :key="category.id"
+      :value="String(category.id)"
+    >
+      {{ category.name }}
+    </option>
+  </select> -->
+  <select
+  v-model="form.category_ids[0]"
+  class="form-select"
+>
+  <option disabled value="">
+    Select category
+  </option>
+
+  <option
+    v-for="category in categories"
+    :key="category.id"
+    :value="category.id"
+  >
+    {{ category.name }}
+  </option>
+</select>
+
+  <small class="text-danger">
+    {{ errors.category_ids }}
+  </small>
+</div>
 
       <!-- CONDITION -->
+
       <div class="mb-3">
         <label class="form-label">Condition</label>
+
         <input
           v-model="form.condition"
           type="text"
           class="form-control"
           placeholder="Example: New / Old"
         />
-        <small class="text-danger">{{ errors.condition }}</small>
+
+        <small class="text-danger">
+          {{ errors.condition }}
+        </small>
       </div>
 
       <!-- DESCRIPTION -->
+
       <div class="mb-3">
         <label class="form-label">Description</label>
+
         <textarea
           v-model="form.description"
           rows="3"
           class="form-control"
           placeholder="Enter description"
         ></textarea>
-        <small class="text-danger">{{ errors.description }}</small>
+
+        <small class="text-danger">
+          {{ errors.description }}
+        </small>
       </div>
 
       <!-- DETAIL -->
+
       <div class="mb-3">
         <label class="form-label">Detail</label>
+
         <textarea
           v-model="form.detail"
           rows="3"
@@ -567,8 +770,10 @@ onMounted(() => {
       </div>
 
       <!-- STORY -->
+
       <div class="mb-3">
         <label class="form-label">Story</label>
+
         <textarea
           v-model="form.story"
           rows="3"
@@ -578,23 +783,30 @@ onMounted(() => {
       </div>
 
       <!-- IMAGE -->
+
       <div class="mb-3">
         <label class="form-label">Product Image</label>
+
         <input
           type="file"
           class="form-control"
           accept="image/*"
           @change="handleImage"
         />
-        <small class="text-danger">{{ errors.image }}</small>
+
+        <small class="text-danger">
+          {{ errors.image }}
+        </small>
       </div>
 
       <!-- PREVIEW -->
+
       <div v-if="imagePreview" class="mb-3">
         <img :src="imagePreview" class="preview-img" alt="Preview" />
       </div>
 
       <!-- BUTTONS -->
+
       <div class="d-flex gap-2">
         <button @click="saveProduct" class="btn btn-success" :disabled="saving">
           {{
@@ -651,9 +863,9 @@ onMounted(() => {
   border-radius: 10px;
 }
 
-/* =========================
+/* =====================================
    SKELETON LOADING
-========================= */
+===================================== */
 
 .skeleton {
   position: relative;
@@ -675,6 +887,7 @@ onMounted(() => {
     rgba(255, 255, 255, 0.7),
     transparent
   );
+
   animation: loading 1s infinite;
 }
 
@@ -688,28 +901,34 @@ onMounted(() => {
   width: 40px;
   height: 20px;
 }
+
 .skeleton-image {
   width: 70px;
   height: 70px;
   border-radius: 12px;
 }
+
 .skeleton-text {
   width: 160px;
   height: 20px;
 }
+
 .skeleton-badge {
-  width: 70px;
+  width: 80px;
   height: 25px;
   border-radius: 30px;
 }
+
 .skeleton-price {
   width: 70px;
   height: 20px;
 }
+
 .skeleton-date {
-  width: 140px;
+  width: 120px;
   height: 20px;
 }
+
 .skeleton-action {
   width: 70px;
   height: 35px;
