@@ -1,5 +1,5 @@
-
 import { createRouter, createWebHistory } from "vue-router";
+<<<<<<< HEAD
 import HomeView from "../views/HomeView.vue";
 import register from "@/views/register.vue";
 import login from "@/views/login.vue";
@@ -12,10 +12,26 @@ import verityOtp from '@/views/forgotPass/verityOtp.vue'
 import Shop from '@/views/shop/shopPage.vue'
 // import resetpassword from '@/views/forgotPassword/resetpassword.vue'
 // import resetPassword from '@/views/forgotPassword/resetPassword.vue'
+=======
+>>>>>>> 2961b14ba9db9efb8314e0849f7984093fbc224d
 
+import HomeView from "../views/HomeView.vue";
+import Register from "@/views/register.vue";
+import Login from "@/views/login.vue";
+import DetailPage from "../components/DetailPage.vue";
+import Checkout from "@/views/Checkout.vue";
+import Success from "@/views/Success.vue";
+import Profile from "@/views/Profile.vue";
+
+import ForgotPassword from "@/views/forgotPass/forgotpassword.vue";
+import ResetPassword from "@/views/forgotPass/resetpassword.vue";
+import VerityOtp from "@/views/forgotPass/verityOtp.vue";
+
+import { useauthStore } from "@/stores/auth.js";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
+
   routes: [
     {
       path: "/",
@@ -25,51 +41,55 @@ const router = createRouter({
         title: "Home",
       },
     },
-    {
-      path: "/about",
-      name: "about",
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import("../views/AboutView.vue"),
-      meta: {
-        title: "About",
-      },
-    },{
-      path: '/contactUS',
-      name: 'contactUS',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import('../views/AboutView.vue'),
-      meta: {
-        title: 'contactUS',
-      },
-    },
+
+    // {
+    //   path: "/about",
+    //   name: "about",
+    //   component: () => import("../views/AboutView.vue"),
+    //   meta: {
+    //     title: "About",
+    //   },
+    // },
+
+    // {
+    //   path: "/contactUS",
+    //   name: "contactUS",
+    //   component: () => import("../views/ContactView.vue"),
+    //   meta: {
+    //     title: "Contact Us",
+    //   },
+    // },
+
     {
       path: "/register",
       name: "register",
-      component: register,
+      component: Register,
       meta: {
         title: "Register",
+        guestOnly: true,
       },
     },
+
     {
       path: "/login",
       name: "login",
-      component: login,
+      component: Login,
       meta: {
         title: "Login",
+        guestOnly: true,
       },
     },
+
     {
       path: "/profile",
       name: "profile",
-      component: profile,
+      component: Profile,
       meta: {
         title: "Profile",
+        requiresAuth: true,
       },
     },
+
     {
       path: "/detail",
       name: "detail",
@@ -78,30 +98,51 @@ const router = createRouter({
         title: "Detail",
       },
     },
+
     {
-      path: "/forgot-password",
-      name: "forgot-password",
-      component: forgotpassword,
+      path: "/checkout",
+      name: "checkout",
+      component: Checkout,
       meta: {
-        title: "forgot-Password",
+        title: "Checkout",
+        requiresAuth: true,
+      },
+    },
+
+    {
+      path: "/success",
+      name: "success",
+      component: Success,
+      meta: {
+        title: "Success",
+        requiresAuth: true,
+      },
+    },
+
+    {
+      path: "/forgotpassword",
+      name: "forgotPassword",
+      component: ForgotPassword,
+      meta: {
+        title: "Forgot Password",
       },
     },
 
     {
       path: "/verityOtp",
       name: "verityOtp",
-      component: verityOtp,
+      component: VerityOtp,
       meta: {
-        title: "Verity-Otp",
+        title: "Verify OTP",
       },
     },
 
     {
       path: "/resetpassword",
       name: "resetpassword",
-      component: resetpassword,
+      component: ResetPassword,
       meta: {
-        title: "Reset-Password",
+        title: "Reset Password",
       },
     },
     {
@@ -115,18 +156,19 @@ const router = createRouter({
   ],
 });
 
-router.beforeEach((to)=>{
-  // const auth = useauthStore()
-  document.title = to.meta.title
-  router.beforeEach((to, from) => {
-  let auth = useauthStore();
-  if(!auth.success && !to.path == '/login'){
-    return {name : 'login'}
+router.beforeEach((to) => {
+
+  const auth = useauthStore();
+  // Change browser title
+  document.title = `${to.meta.title} | ពិភពទំនិញ`;
+
+  // Protect routes
+  if (to.meta.requiresAuth && !auth.token) {
+    return "/login";
   }
-  if(auth.success && to.path == '/login'){
-    return '/'
-  }
+
+
   return true;
-})
-})
+});
+
 export default router;
