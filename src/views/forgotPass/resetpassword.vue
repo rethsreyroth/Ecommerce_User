@@ -1,4 +1,3 @@
-
 <template>
   <div class="reset-wrapper">
     <!-- Background -->
@@ -38,7 +37,7 @@
 
             <!-- Input -->
             <input
-              :type="showPassword ? 'password' :'text' "
+              :type="showPassword ? 'password' : 'text'"
               v-model="password"
               class="custom-input"
               placeholder="ពាក្យសម្ងាត់ថ្មី"
@@ -71,7 +70,7 @@
 
             <!-- Input -->
             <input
-              :type="showConfirmPassword ? 'password' :'text' "
+              :type="showConfirmPassword ? 'password' : 'text'"
               v-model="confirmPassword"
               class="custom-input"
               placeholder="បញ្ជាក់ពាក្យសម្ងាត់"
@@ -250,7 +249,6 @@ const submitForm = async () => {
     return;
   }
   try {
-    
     loading.value = true;
     console.log("EMAIL:", email);
     console.log("OTP:", otp);
@@ -436,7 +434,7 @@ const submitForm = async () => {
   background: transparent;
   color: #777;
   font-size: 20px;
-  /* cursor: pointer; */ 
+  /* cursor: pointer; */
 }
 /* Error */
 .error-text {
