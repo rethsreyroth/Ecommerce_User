@@ -22,9 +22,6 @@
                     <input class=" form-check-input" type="checkbox" name="" id=""> ចងចាំ
                     <router-link  to="/forgotpassword" class="text-dark"  style=" margin-left: 58px;">ភ្លេចពាក្យសម្ងាត់</router-link>
                 </div>
-                <button class="btn btn-primary w-100 py-2">
-                    ចូលគណនី
-                </button>
                 <div class="d-flex align-items-center text-muted my-4">
                     <hr class="flex-grow-1">
                     <span class="px-3">ឬបន្តជាមួយ</span>

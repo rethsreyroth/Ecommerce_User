@@ -3,6 +3,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "../views/HomeView.vue";
 import register from "@/views/register.vue";
 import login from "@/views/login.vue";
+// import Logout from "@/views/Logout.vue";
 import DetailPage from "../components/DetailPage.vue";
 import Checkout from "@/views/Checkout.vue";
 import Success from "@/views/Success.vue";
@@ -63,6 +64,14 @@ const router = createRouter({
         title: "Login",
       },
     },
+    // {
+    //     path: '/logout',
+    //     name: 'logout',
+    //     component: Logout,
+    //     meta: {
+    //       title: "Logout",
+    //     }
+    // },
     {
       path: "/profile",
       name: "profile",
