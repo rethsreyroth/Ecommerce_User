@@ -294,30 +294,25 @@ const handleSignup = async () => {
     return
   }
   
-  loading.value = true
-
-  const success = await auth.register(form)
-  if (success) {
-      alertSuccess('គណនីត្រូវបានបង្កើតដោយជោគជ័យ!')
-      router.push('/login');
-  }
+  loading.value = true;
   try {
     await auth.register(form);
     // console.log(auth.success);
     
     if (auth.success) {
       showToast('គណនីត្រូវបានបង្កើតដោយជោគជ័យ', 'success')
-      router.push('/login');
-      resetform();
+      router.push('/login')
     } else {
-      showToast('គណនីធ្លាប់មានពីមុនមក សូមបង្កើតគណនីថ្មី', 'error')
+      showToast('មិនអាចបង្កើតគណនីបានទេ សូមព្យាយាមម្តងទៀត', 'error')
     }
-  } catch (error) {
+    } catch (error) {
     console.error('Signup error:', error)
     showToast('កំហុសក្នុងការភ្ជាប់ប្រព័ន្ធ សូមព្យាយាមម្តងទៀត', 'error')
-  } finally {
+    } finally {
     loading.value = false 
+    }
   }
+
   
   // try {
   //   const success = await authStore.register(form)
@@ -334,7 +329,6 @@ const handleSignup = async () => {
   //   loading.value = false
   // }
 
-}
 </script>
 
 <style scoped>
