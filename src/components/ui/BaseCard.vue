@@ -28,7 +28,7 @@
                     
                     <div class="exact-card-footer">
                         <span class="exact-stock-text">មានក្នុងស្តុក</span>
-                        <router-link to="/contectUs" class="exact-btn-action">ព័ត៌មានលម្អិត</router-link>
+                        <router-link to="/detailpage" class="exact-btn-action">ព័ត៌មានលម្អិត</router-link>
                     </div>
                 </div>
             </div>
@@ -47,9 +47,9 @@
     // ទាញយក products state ពី store មកប្រើដោយប្រើ storeToRefs
     const { products } = storeToRefs(productStore);
 
-    // onMounted(async () => {
-    // // ហៅ function ទៅទាញទិន្នន័យពី API នៅពេល component ចាប់ផ្តើមដំណើរការ (mounted)
-    //     await productStore.fetchProduct();
-    // });console.log(products)
+    onMounted(async () => {
+    // ហៅ function ទៅទាញទិន្នន័យពី API នៅពេល component ចាប់ផ្តើមដំណើរការ (mounted)
+        await productStore.fetchProduct();
+    });console.log(products)
 
 </script> 

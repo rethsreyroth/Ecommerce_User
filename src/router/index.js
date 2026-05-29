@@ -129,6 +129,14 @@ const router = createRouter({
         title: "Reset Password",
       },
     },
+    {
+      path: "/detailpage",
+      name: "detailpage",
+      component: DetailPage,
+      meta: {
+        title: "Detail Page",
+      },
+    },
   ],
 });
 
