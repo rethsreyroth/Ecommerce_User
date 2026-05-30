@@ -1,7 +1,11 @@
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
+<<<<<<< HEAD
 import router from '@/router';
 import axios from 'axios'
+=======
+// import axios from 'axios'
+>>>>>>> 8836b241491f3f4c33a53d43570a281480f98bcf
 import api from '@/API/api'
 
 export const useauthStore = defineStore('auth', () => {

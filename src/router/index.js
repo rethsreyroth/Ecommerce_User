@@ -36,14 +36,14 @@ const router = createRouter({
     //   },
     // },
 
-    // {
-    //   path: "/contactUS",
-    //   name: "contactUS",
-    //   component: () => import("../views/ContactView.vue"),
-    //   meta: {
-    //     title: "Contact Us",
-    //   },
-    // },
+    {
+      path: "/contactUS",
+      name: "contactUS",
+      component: () => import("../views/ContactView.vue"),
+      meta: {
+        title: "Contact Us",
+      },
+    },
 
     {
       path: "/register",
@@ -135,17 +135,6 @@ const router = createRouter({
       component: ResetPassword,
       meta: {
         title: "Reset Password",
-<<<<<<< HEAD
-=======
-      },
-    },
-    {
-      path: "/detailpage",
-      name: "detailpage",
-      component: DetailPage,
-      meta: {
-        title: "Detail Page",
->>>>>>> 80042bf8b50e4043266ae523b70abe196d21af64
       },
     },
   ],
@@ -160,24 +149,13 @@ router.beforeEach((to) => {
   // Protect routes
   if (to.meta.requiresAuth && !auth.token) {
     return "/login";
-<<<<<<< HEAD
-=======
   }
   if(auth.token && to.path == '/login'){
     return '/'
->>>>>>> 80042bf8b50e4043266ae523b70abe196d21af64
   }
 
 
   return true;
 });
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 export default router;
-=======
-export default router;
->>>>>>> 80042bf8b50e4043266ae523b70abe196d21af64
-=======
-export default router;
->>>>>>> f023891ae2574282cf10740fc698df6e4cf975de

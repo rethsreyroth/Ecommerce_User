@@ -29,19 +29,13 @@
                     ភ្លេចពាក្យសម្ងាត់?
                     </router-link>
                 </div>
-<<<<<<< HEAD
-<<<<<<< HEAD
                 <button class="btn btn-primary w-100 py-2">
                     ចូលគណនី
-=======
                 <button class="btn btn-primary w-100 py-2" :disabled="loading">
                     <span v-if="!loading">ចូលគណនី</span>
                     <span v-if="loading" class="loading-spinner"></span>
                     <span v-if="loading">កំពុងដំណើរការ...</span>
->>>>>>> 80042bf8b50e4043266ae523b70abe196d21af64
                 </button>
-=======
->>>>>>> f023891ae2574282cf10740fc698df6e4cf975de
                 <div class="d-flex align-items-center text-muted my-4">
                     <hr class="flex-grow-1">
                     <span class="px-3">ឬបន្តជាមួយ</span>
@@ -110,9 +104,6 @@
             
     }
 
-<<<<<<< HEAD
-</script>
-=======
 </script>
 <style scoped>
     .loading-spinner {
@@ -130,4 +121,3 @@
         }
     }
 </style>
->>>>>>> 80042bf8b50e4043266ae523b70abe196d21af64

@@ -294,14 +294,24 @@ const handleSignup = async () => {
     return
   }
   
+<<<<<<< HEAD
   loading.value = true;
+=======
+  loading.value = true
+
+  const success = await auth.register(form)
+  if (success) {
+      alertSuccess('គណនីត្រូវបានបង្កើតដោយជោគជ័យ!')
+      router.push('/');
+  }
+>>>>>>> 8836b241491f3f4c33a53d43570a281480f98bcf
   try {
     await auth.register(form);
     // console.log(auth.success);
     
     if (auth.success) {
       showToast('គណនីត្រូវបានបង្កើតដោយជោគជ័យ', 'success')
-      router.push('/login')
+      router.push('/')
     } else {
       showToast('មិនអាចបង្កើតគណនីបានទេ សូមព្យាយាមម្តងទៀត', 'error')
     }
