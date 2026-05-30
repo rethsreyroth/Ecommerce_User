@@ -294,9 +294,6 @@ const handleSignup = async () => {
     return
   }
   
-<<<<<<< HEAD
-  loading.value = true;
-=======
   loading.value = true
 
   const success = await auth.register(form)
@@ -304,7 +301,6 @@ const handleSignup = async () => {
       alertSuccess('គណនីត្រូវបានបង្កើតដោយជោគជ័យ!')
       router.push('/');
   }
->>>>>>> 8836b241491f3f4c33a53d43570a281480f98bcf
   try {
     await auth.register(form);
     // console.log(auth.success);

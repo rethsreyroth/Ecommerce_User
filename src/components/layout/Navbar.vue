@@ -141,9 +141,9 @@ a {
     transition: transform 0.2s;
 }
 
-a:hover {
-    transform: scale(1.1);
-}
+/* a:hover { */
+    /* transform: scale(1.1); */
+/* } */
 </style>
 
 <template>
@@ -158,27 +158,29 @@ a:hover {
             <!-- Navbar -->
             <ul class="collapse navbar-collapse navbar-nav justify-content-end align-items-center gap-lg-4 mt-3 mt-lg-0">
                 <!-- Buy / Sell -->
-                <li class="nav-item d-flex justify-content-center align-items-center gap-lg-3 my-3 my-lg-0">
-                    <router-link to="/ContactUS" class="btn btn-outline-primary rounded-pill px-3"
-                        :class="{ 'bg-primary active': $route.path === '/ContactUS' }">
-                        <i class="bi bi-bag-check me-1"></i>
-                        ទិញ
-                    </router-link>
-
-                    <router-link to="/sell" class="btn btn-outline-primary rounded-pill px-3">
-                        <i class="bi bi-shop me-1"></i>
-                        លក់
-                    </router-link>
-                
-                    <li class="d-flex justify-content-center gap-lg-2 my-3 my-lg-0">
-                        <router-link to="/" class="nav-link">
-                            ទំព័រដើម
+                <li>
+                    <div class="nav-item d-flex justify-content-center align-items-center gap-lg-3 my-3 my-lg-0">
+                        <router-link to="/ContactUS" class="btn btn-outline-primary rounded-pill px-3"
+                            :class="{ 'bg-primary active': $route.path === '/ContactUS' }">
+                            <i class="bi bi-bag-check me-1"></i>
+                            ទិញ
                         </router-link>
 
-                        <router-link to="/contactUS" class="nav-link">
-                            ទំនាក់ទំនង
+                        <router-link to="/sell" class="btn btn-outline-primary rounded-pill px-3">
+                            <i class="bi bi-shop me-1"></i>
+                            លក់
                         </router-link>
-                    </li>
+                    
+                        <li class="d-flex justify-content-center gap-lg-2 my-3 my-lg-0">
+                            <router-link to="/" class="nav-link">
+                                ទំព័រដើម
+                            </router-link>
+
+                            <router-link to="/contactUS" class="nav-link">
+                                ទំនាក់ទំនង
+                            </router-link>
+                        </li>
+                    </div>
                 </li>
 
                 <!-- Right Side -->
@@ -204,7 +206,7 @@ a:hover {
                             </li>
 
                             <li class="dropdown-item"> 
-                                <router-link @click="handleLogout" class="dropdown-link text-decoration-none">ចាកចេញ<i class="bi bi-box-arrow-right ms-1"></i></router-link>
+                                <a href="#" @click.prevent.stop="handleLogout" class="dropdown-link text-decoration-none">ចាកចេញ<i class="bi bi-box-arrow-right ms-1"></i></a>
                             </li>
                         </ul>
                     </div>
@@ -218,20 +220,22 @@ a:hover {
         </div>
     </nav>
     
-    <div class="modal" tabindex="-1" v-if="showLogoutModal" @click.self="cancelLogout">
+    <div class="modal" tabindex="-1":class="{ 'show': showLogoutModal }" 
+        :style="{ display: showLogoutModal ? 'block' : 'none', backgroundColor: showLogoutModal ? 'rgba(0,0,0,0.5)' : 'transparent' }"
+         @click.self="cancelLogout">
         <div class="modal-dialog">
             <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">ចាកចេញពីគណនី</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <p>តើអ្នកពិតជាចង់ចាកចេញពីកម្មវិធីមែនទេ?</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="cancelLogout">បោះបង់</button>
-                <button type="button" class="btn btn-primary" @click="confirmLogout">ចាកចេញ</button>
-            </div>
+                <div class="modal-header">
+                    <h5 class="modal-title">ចាកចេញពីគណនី</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>តើអ្នកពិតជាចង់ចាកចេញពីកម្មវិធីមែនទេ?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="cancelLogout">បោះបង់</button>
+                    <button type="button" class="btn btn-primary" @click="confirmLogout">ចាកចេញ</button>
+                </div>
             </div>
         </div>
     </div>
@@ -284,7 +288,7 @@ a:hover {
                 </li>
 
                 <li class="dropdown-item"> 
-                    <router-link @click="handleLogout" class="dropdown-link text-decoration-none">ចាកចេញ<i class="bi bi-box-arrow-right ms-1"></i></router-link>
+                    <a href="#" @click.prevent.stop="handleLogout" class="dropdown-link text-decoration-none">ចាកចេញ<i class="bi bi-box-arrow-right ms-1"></i></a>
                 </li>
             </ul>
         </div>
@@ -340,9 +344,8 @@ a:hover {
 
 
     /////////////log out///////////////
-    const router = useRouter();
     const showLogoutModal = ref(false);
-
+    const router = useRouter();
     const handleLogout = () => {
         showLogoutModal.value = true;
     }

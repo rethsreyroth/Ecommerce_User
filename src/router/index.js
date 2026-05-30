@@ -7,6 +7,8 @@ import DetailPage from "../components/DetailPage.vue";
 import Checkout from "@/views/Checkout.vue";
 import Success from "@/views/Success.vue";
 import Profile from "@/views/Profile.vue";
+import ContactUS from "@/views/ContactUS.vue";
+import AddtoCart from "@/components/AddtoCart.vue";
 
 import ForgotPassword from "@/views/forgotPass/forgotpassword.vue";
 import ResetPassword from "@/views/forgotPass/resetpassword.vue";
@@ -39,7 +41,7 @@ const router = createRouter({
     {
       path: "/contactUS",
       name: "contactUS",
-      component: () => import("../views/ContactView.vue"),
+      component: ContactUS,
       meta: {
         title: "Contact Us",
       },
@@ -64,14 +66,6 @@ const router = createRouter({
         guestOnly: true,
       },
     },
-    // {
-    //     path: '/logout',
-    //     name: 'logout',
-    //     component: Logout,
-    //     meta: {
-    //       title: "Logout",
-    //     }
-    // },
     {
       path: "/profile",
       name: "profile",
@@ -79,15 +73,6 @@ const router = createRouter({
       meta: {
         title: "Profile",
         requiresAuth: true,
-      },
-    },
-
-    {
-      path: "/detail",
-      name: "detail",
-      component: DetailPage,
-      meta: {
-        title: "Detail",
       },
     },
 
@@ -135,6 +120,23 @@ const router = createRouter({
       component: ResetPassword,
       meta: {
         title: "Reset Password",
+      },
+    },
+    {
+      path: "/detailpage/:id",
+      name: "detailpage",
+      component: DetailPage,
+      meta: {
+        title: "Detail Page",
+      },
+    },
+    {
+      path: "/addtoCart",
+      name: "addtoCart",
+      component: AddtoCart,
+      meta: {
+        title: "Cart",
+        requiresAuth: true,
       },
     },
   ],

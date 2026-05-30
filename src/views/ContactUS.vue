@@ -90,7 +90,7 @@
                     
                     <!-- ផែនទីគំរូ Google Map -->
                     <div class="ratio ratio-16x9 rounded border overflow-hidden shadow-sm mt-2">
-                        <iframe src="https://google.com" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                        <iframe src="https://google.com" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                     </div>
                 </div>
             </div>

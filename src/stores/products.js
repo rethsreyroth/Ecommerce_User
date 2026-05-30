@@ -3,6 +3,7 @@ import { ref } from 'vue';
 import api from "@/API/api";
 
 export const useProductStore = defineStore('product', () => {
+
     const products = ref([]);
     async function fetchProduct(params = {}) { 
         let url = "/api/products";

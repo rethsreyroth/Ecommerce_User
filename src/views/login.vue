@@ -29,8 +29,9 @@
                     ភ្លេចពាក្យសម្ងាត់?
                     </router-link>
                 </div>
-                <button class="btn btn-primary w-100 py-2">
+                <!-- <button class="btn btn-primary w-100 py-2">
                     ចូលគណនី
+                </button> -->
                 <button class="btn btn-primary w-100 py-2" :disabled="loading">
                     <span v-if="!loading">ចូលគណនី</span>
                     <span v-if="loading" class="loading-spinner"></span>

@@ -24,8 +24,4 @@
   border-radius: 20px;
   box-shadow: 0 3px 15px rgba(0, 0, 0, 0.05);
 }
-<<<<<<< HEAD
 </style>
-=======
-</style>
->>>>>>> 80042bf8b50e4043266ae523b70abe196d21af64
