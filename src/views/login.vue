@@ -29,8 +29,15 @@
                     ភ្លេចពាក្យសម្ងាត់?
                     </router-link>
                 </div>
+<<<<<<< HEAD
                 <button class="btn btn-primary w-100 py-2">
                     ចូលគណនី
+=======
+                <button class="btn btn-primary w-100 py-2" :disabled="loading">
+                    <span v-if="!loading">ចូលគណនី</span>
+                    <span v-if="loading" class="loading-spinner"></span>
+                    <span v-if="loading">កំពុងដំណើរការ...</span>
+>>>>>>> 80042bf8b50e4043266ae523b70abe196d21af64
                 </button>
                 <div class="d-flex align-items-center text-muted my-4">
                     <hr class="flex-grow-1">
@@ -54,6 +61,7 @@
     import { useauthStore } from '@/stores/auth';
     let auth = useauthStore();
     let isvalid = ref(true);
+    const loading = ref(false)
     let form = reactive ({
         email: '',
         password: '',
@@ -75,15 +83,48 @@
             form.errors.password = 'សូមបញ្ចូលពាក្យសម្ងាត់របស់អ្នក';
             isvalid.value= false
         }
-        return isvalid
-        
+        return isvalid   
     }
     const loginForm = async() => {   
         // console.log(email.value);
         // console.log(password.value);
         if(!validationForm()) return
-            await auth.login(form);
-            router.push('/');
+            loading.value = true;
+            try{
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                await auth.login(form)
+            }catch(error){
+                console.err(error);
+            }
+            loading.value = false;
+            
+            // if(alert == 'Login Success'){
+                // router.push('/');
+            //     return true
+            // }else{
+            //     return false
+            // }
+            
     }
 
+<<<<<<< HEAD
 </script>
+=======
+</script>
+<style scoped>
+    .loading-spinner {
+        width: 18px;
+        height: 18px;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        border-top-color: white;
+        animation: spin 0.6s linear infinite;
+        display: inline-block;
+    }
+    @keyframes spin {
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+</style>
+>>>>>>> 80042bf8b50e4043266ae523b70abe196d21af64
