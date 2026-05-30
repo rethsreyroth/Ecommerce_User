@@ -64,7 +64,14 @@ const router = createRouter({
         guestOnly: true,
       },
     },
-
+    // {
+    //     path: '/logout',
+    //     name: 'logout',
+    //     component: Logout,
+    //     meta: {
+    //       title: "Logout",
+    //     }
+    // },
     {
       path: "/profile",
       name: "profile",
@@ -166,7 +173,11 @@ router.beforeEach((to) => {
 });
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 export default router;
 =======
 export default router;
 >>>>>>> 80042bf8b50e4043266ae523b70abe196d21af64
+=======
+export default router;
+>>>>>>> f023891ae2574282cf10740fc698df6e4cf975de

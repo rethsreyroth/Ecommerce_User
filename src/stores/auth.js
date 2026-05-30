@@ -8,6 +8,7 @@ export const useauthStore = defineStore('auth', () => {
   let token = ref(localStorage.getItem('token') || null)
   let errMassage = ref("")
   let success = ref(null)
+  // login
   const login = async (data) =>{
     console.log(data);
     try{
@@ -33,6 +34,7 @@ export const useauthStore = defineStore('auth', () => {
     }
   }
 
+  // register
   const register = async (data) =>{
     console.log(data);
     try{
@@ -45,5 +47,33 @@ export const useauthStore = defineStore('auth', () => {
       console.error(err.response);
     }
   }
-  return {login, token, register, success};
-})
+  // logout
+  const Logout = async () =>{
+      const res =await api.delete('/api/logout');
+      console.log(res);
+      localStorage.removeItem('token');
+  }
+
+  
+
+  return {login, Logout, register, token, success};
+  })
+  
+//   const Logout = async (data) => {
+//     try {
+//         await api.delete('/api/logout', {
+//             headers: {
+//                 Accept: 'application/json',
+//                 Authorization: Bearer `${token.value}`
+//             }
+//         })
+
+//         token.value = null
+//         localStorage.removeItem('token')
+
+//     } catch (err) {
+//         console.error(err.response)
+//     }
+// }
+  
+
