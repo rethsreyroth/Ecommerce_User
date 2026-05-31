@@ -186,8 +186,9 @@ a {
                 <!-- Right Side -->
                 <li class="nav-item d-flex align-items-center justify-content-end gap-lg-2 ms-lg-5 w-30">
                     <!-- Cart -->
-                    <router-link to="/cart" class="nav-link">
+                    <router-link to="/addtoCart" class="nav-link px-2 py-0 rounded-4" style="background: #eff1f2;">
                         <i class="bi bi-cart3"></i>
+                        <small>ចំនួន{{totalCartItems}}</small>
                     </router-link>
 
                     <!-- search -->
@@ -197,9 +198,9 @@ a {
                         <i class="bi bi-search"></i>
                     </router-link>
 
-                    <div v-if="auth.token" @click.prevent="`isSearchOpen = true`" 
-                        class="nav-link d-flex align-items-start">
-                        <img :src="imagePreview" class="profile-img mb-1"/>
+                    <a v-if="auth.token" @click.prevent="`isSearchOpen = true`" 
+                        class="nav-link d-flex align-items-start text-decoration-none">
+                        <img :src="imagePreview" class="profile-img"/>
                         <ul class="dropdown">
                             <li class="dropdown-item mb-2">
                                 <router-link to="/profile" class="dropdown-link text-decoration-none">មើលប្រវត្តិរូប</router-link>
@@ -209,7 +210,7 @@ a {
                                 <a href="#" @click.prevent.stop="handleLogout" class="dropdown-link text-decoration-none">ចាកចេញ<i class="bi bi-box-arrow-right ms-1"></i></a>
                             </li>
                         </ul>
-                    </div>
+                    </a>
 
                     <!-- Login -->
                     <router-link v-else to="/login" class="btn btn-outline-primary rounded-pill px-4">
@@ -219,7 +220,72 @@ a {
             </ul>
         </div>
     </nav>
-    
+
+    <div class="search d-flex" v-if="isSearchOpen">
+        <div class="search-container-wrapper d-flex gap-2 m-auto">
+            <div class="search-wrapper">
+                <i class="bi bi-search"></i>
+                <input type="text" class="search-input" placeholder="ស្វែងរក" v-model="search">
+                <button @click="CancelInput" class=" btn-sm border-0">
+                    <i class="bi bi-x-lg black rounded-pill"></i>
+                </button>               
+            </div>
+            <button class="btn m-auto btn-cancel" @click="Hide()">បោះបង់</button>
+        </div>
+    </div>
+
+    <!-- respone screen -->
+    <div class="aeon-bottom-nav navbar">
+        <router-link to="/" class="nav-item">
+            <i class="bi bi-house-door"></i>
+        </router-link>
+        
+        <router-link to="/" class="nav-item">
+            <i class="bi bi-bag-check"></i>
+            <!-- <span>ទិញ</span> -->
+        </router-link>
+
+        <router-link to="/sell" class="nav-item">
+            <i class="bi bi-shop"></i>
+            <!-- <span>លក់</span> -->
+        </router-link>
+
+        <router-link to="/addtoCart" class="nav-item position-relative" >
+            <i class="bi bi-cart3"></i>
+            <small class="item position-absolute">{{totalCartItems}}</small>
+        </router-link>
+
+        <!-- search -->
+        <router-link to="" @click="showHide()" class="nav-item"
+            :class="{ 'text-primary': isSearchOpen }"
+            :style="{ color: isSearchOpen ? primary : '#1f2937' }">
+            <i class="bi bi-search"></i>
+        </router-link>
+
+        <div v-if="auth.token" @click.prevent="`isSearchOpen = true`" 
+            class="nav-item">
+            <img :src="imagePreview" class="profile-img mb-1"/>
+            <ul class="nav-dropdown text-start">
+                <li class="dropdown-item mb-2">
+                    <router-link to="/profile" class="dropdown-link text-decoration-none">មើលប្រវត្តិរូប</router-link>
+                </li>
+
+                <li class="dropdown-item"> 
+                    <a href="#" @click.prevent.stop="handleLogout" class="dropdown-link text-decoration-none d-inline-block">ចាកចេញ
+                        <i class="bi bi-box-arrow-right fs-6"></i>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Login -->
+        <router-link v-else to="/login" class="btn btn-outline-primary rounded-pill nav-item px-4">
+            Login
+        </router-link>
+    </div>
+
+
+    ///////////view profile or logout
     <div class="modal" tabindex="-1":class="{ 'show': showLogoutModal }" 
         :style="{ display: showLogoutModal ? 'block' : 'none', backgroundColor: showLogoutModal ? 'rgba(0,0,0,0.5)' : 'transparent' }"
          @click.self="cancelLogout">
@@ -239,67 +305,7 @@ a {
             </div>
         </div>
     </div>
-
-    <div class="search d-flex" v-if="isSearchOpen">
-        <div class="search-container-wrapper d-flex gap-2 m-auto">
-            <div class="search-wrapper">
-                <i class="bi bi-search"></i>
-                <input type="text" class="search-input" placeholder="ស្វែងរក" v-model="search">
-                <i class="bi bi-x-lg black rounded-pill"></i>
-            </div>
-            <button class="btn m-auto btn-cancel" @click="Hide()">បោះបង់</button>
-        </div>
-    </div>
-
-    <!-- respone screen -->
-    <div class="aeon-bottom-nav navbar">
-        <router-link to="/" class="nav-item">
-            <i class="bi bi-house-door"></i>
-            <!-- <span>ទំព័រដើម</span> -->
-        </router-link>
-        
-        <router-link to="/" class="nav-item">
-            <i class="bi bi-bag-check"></i>
-            <!-- <span>ទិញ</span> -->
-        </router-link>
-
-        <router-link to="/" class="nav-item">
-            <i class="bi bi-shop"></i>
-            <!-- <span>លក់</span> -->
-        </router-link>
-
-        <router-link to="/" class="nav-item">
-            <i class="bi bi-cart3"></i>
-            <!-- <span>កន្ត្រក</span> -->
-        </router-link>
-
-        <router-link to="" @click="showHide()" class="nav-item"
-            :class="{ 'text-primary': isSearchOpen }"
-            :style="{ color: isSearchOpen ? primary : '#1f2937' }">
-            <i class="bi bi-search"></i>
-        </router-link>
-
-        <div v-if="auth.token" @click.prevent="`isSearchOpen = true`" 
-            class="nav-item d-flex align-items-start">
-            <img :src="imagePreview" class="profile-img mb-1"/>
-            <ul class="dropdown">
-                <li class="dropdown-item mb-2">
-                    <router-link to="/profile" class="dropdown-link text-decoration-none">មើលប្រវត្តិរូប</router-link>
-                </li>
-
-                <li class="dropdown-item"> 
-                    <a href="#" @click.prevent.stop="handleLogout" class="dropdown-link text-decoration-none">ចាកចេញ<i class="bi bi-box-arrow-right ms-1"></i></a>
-                </li>
-            </ul>
-        </div>
-
-        <!-- Login -->
-        <router-link v-else to="/login" class="btn btn-outline-primary rounded-pill nav-item px-4">
-            Login
-        </router-link>
-    </div>
 </template>
-
 <script setup>
     import { storeToRefs } from 'pinia'; // ជួយរក្សាភាព Reactive ពេលទាញយក state មកប្រើ
     import { RouterLink } from 'vue-router'
@@ -308,8 +314,11 @@ a {
     import { useauthStore } from '@/stores/auth';
     import { onMounted, ref, watch } from 'vue';
     import { useRouter } from 'vue-router';
+    import { useCart } from '@/stores/addToCart';
     let auth = useauthStore();
     let isSearchOpen = ref(false);
+    const cartStore = useCart();
+    const { totalCartItems } = storeToRefs(cartStore);
 
     /////Show and Hide btn search
     function showHide(){
@@ -321,7 +330,6 @@ a {
         isSearchOpen.value = false;
     }
 
-
     ///////Search Product
     let productStore = useProductStore();
     let search = ref('');
@@ -330,6 +338,10 @@ a {
         console.log(search.value);
         await productStore.fetchProduct({search : value});
     })
+
+    function CancelInput(){
+        search.value = '';
+    }
 
     //////get profile image
     const profileStore = useProfileStore();
@@ -370,7 +382,15 @@ a {
         border: 2px solid #0d6efd;
     }
 
-    .dropdown{
+    /* ចំនួនទំនិញ */
+    .nav-item .item{
+        border-radius: 100%;
+        font-size: 16px;
+        color: #b00e0e;
+        transform: translate(10px, -190%);
+    }
+
+    .nav-link .dropdown{
         padding: 10px 15px;
         background-color: #e3eaf4;
         border-radius: 8px;
@@ -382,20 +402,39 @@ a {
         visibility: hidden;
         transition: 0.8s;
     }
-    .nav-link:hover .dropdown{
-        transform: translateY(30px);
+    .nav-link:hover .dropdown
+    {
+        transform: translate(-10%, 30px);
+        opacity: 1;
+        visibility: visible;
+    } 
+    
+    .nav-item .nav-dropdown{
+        padding: 10px 15px;
+        background-color: #e3eaf4;
+        border-radius: 8px;
+        position: absolute;
+        transform: translate(10%, -130%);
+
+        box-shadow: 1px 1px 9px #908f8f;
+        opacity: 0;
+        visibility: hidden;
+        transition: 0.8s;
+    }
+    .nav-item:hover .nav-dropdown{
+        transform: translate(-10%, -130%);
         opacity: 1;
         visibility: visible;
     }
 
-    .dropdown .dropdown-link{
-        /* font-size: 17px !important; */
-        font-weight: 500;
+    .dropdown-link{
+        font-size: 15px !important;
+        font-weight: 450;
         color: var(--text-dark);
         transition: color 0.2s ease;
     }
 
-    .dropdown .dropdown-link:hover{
+    .dropdown-link:hover{
         color: #0e65ef;
     }
 </style>

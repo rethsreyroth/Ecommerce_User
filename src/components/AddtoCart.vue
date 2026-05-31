@@ -3,88 +3,57 @@
     <div class="container-fluid layout-wrapper py-4">
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h1 class="page-title">កន្ត្រកទំនិញ</h1>
-            <button class="delete-btn btn-delete-all"><i class="bi bi-trash3"></i>សម្អាតកន្រ្តក់</button>
+            <button class="delete-btn btn-delete-all" @click="clearCart"><i class="bi bi-trash3"></i>សម្អាតកន្រ្តក់</button>
         </div> 
         <div class="cart-layout p-4">
             <div class="cart-items-container"> 
-                <div class="cart-item">
+                <div v-if="cartItems.length === 0" class="text-center py-5 bg-white rounded-4 shadow-sm">
+                    <i class="bi bi-cart-x text-muted" style="font-size: 3rem;"></i>
+                    <h5 class="text-muted mt-3">មិនទាន់មានទំនិញនៅក្នុងកន្ត្រកនៅឡើយទេ</h5>
+                </div>
+
+                <div v-else class="cart-item" v-for="item in cartItems" :key="item.id">
                     <div class="item-img-box col-2">
-                        <img src="https://via.placeholder.com/100x100?text=iPhone+16">
+                        <img :src="item.image" :alt="item.title">
                     </div>
                     <div class="item-details col-8 px-4">
-                        <span class="item-category">SMART PHONE</span>
-                        <h3 class="item-name">iphone 16 pro max</h3>
-                        <h3 class="item-name">ស្ថានភាពទំនិញ: ថ្មី</h3>
+                        <span class="item-category">{{item.title}}</span>
+                        <h3 class="item-name">{{item.description}}</h3>
+                        <h3 class="item-name">ស្ថានភាពទំនិញ: {{ item.condition }}</h3>
                         <div class="quantity-selector">
-                            <button class="qty-btn">-</button>
-                            <input type="text" class="qty-input" value="1" readonly>
-                            <button class="qty-btn">+</button>
+                            <button class="qty-btn" @click="updateQty(item.id, item.qty - 1)">-</button>
+                            <span  class="qty-input">{{item.qty}}</span>
+                            <button class="qty-btn" @click="updateQty(item.id, item.qty + 1)">+</button>
                         </div>
                     </div>
                     <div class="item-actions col-2">
-                        <button class="delete-btn"><i class="bi bi-trash3"></i></button>
-                        <small class="item-name">$10តម្លៃក្នុងមួយ</small>
-                        <div class="item-price">$1,329.00</div>
+                        <button class="delete-btn" @click="removeItem(item.id)"><i class="bi bi-trash3"></i></button>
+                        <small class="item-name">${{item.price}}/1</small>
+                        <div class="item-price">${{ (item.price * item.qty).toFixed(2) }}</div>
                     </div>
                 </div>
 
-                <div class="cart-item">
-                    <div class="item-img-box col-2">
-                        <img src="https://via.placeholder.com/100x100?text=iPhone+16">
-                    </div>
-                    <div class="item-details col-8 px-4">
-                        <span class="item-category">SMART PHONE</span>
-                        <h3 class="item-name">iphone 16 pro max</h3>
-                        <div class="quantity-selector">
-                            <button class="qty-btn">-</button>
-                            <input type="text" class="qty-input" value="1" readonly>
-                            <button class="qty-btn">+</button>
-                        </div>
-                    </div>
-                    <div class="item-actions col-2">
-                        <button class="delete-btn"><i class="bi bi-trash3"></i></button>
-                        <div class="item-price">$ 1,329.00</div>
-                    </div>
-                </div>
-
-                <div class="cart-item">
-                    <div class="item-img-box col-2">
-                        <img src="https://via.placeholder.com/100x100?text=iPhone+16">
-                    </div>
-                    <div class="item-details col-8 px-4">
-                        <span class="item-category">SMART PHONE</span>
-                        <h3 class="item-name">iphone 16 pro max</h3>
-                        <div class="quantity-selector">
-                            <button class="qty-btn">-</button>
-                            <input type="text" class="qty-input" value="1" readonly>
-                            <button class="qty-btn">+</button>
-                        </div>
-                    </div>
-                    <div class="item-actions col-2">
-                        <button class="delete-btn"><i class="bi bi-trash3"></i></button>
-                        <div class="item-price">$ 1,329.00</div>
-                    </div>
-                </div>
             </div>
-
             <div class="summary-sidebar">
                 <div class="summary-card">
                     <h2 class="summary-title">សង្ខេបការបម្មង់</h2>
-                    <div class="summary-row">
-                        <span>តម្លៃសរុបបឋម</span>
-                        <span class="summary-total">$2,430.00</span>
-                    </div>
+                    
                     <div class="summary-row">
                         <span>ចំនួនទំនិញ</span>
-                        <span class="summary-total">3</span>
-                    </div><div class="summary-row">
+                        <span class="summary-total">{{ totalCartItems }}</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>តម្លៃសរុបបឋម</span>
+                        <span class="summary-total">${{}}</span>
+                    </div>
+                    <div class="summary-row">
                         <span class=" fw-normal">ដឹកជញ្ជូន</span>
                         <span class="summary-total fw-normal">ជ្រើសរើសពេលបង់ប្រាក់</span>
                     </div>
                     <hr class="my-3 text-secondary opacity-25">
                     <div class="summary-row">
                         <span>តម្លៃសរុប</span>
-                        <span class="summary-qty">$2,430.00</span>
+                        <span class="summary-qty">${{totalCartPrice}}</span>
                     </div>
                     <button class="checkout-btn bg-primary">ទូទាត់ប្រាក់</button>
                 </div>
@@ -96,54 +65,20 @@
                 <i class="bi bi-chevron-left p-2 rounded-pill"></i>
             </button>
             <div class="carousel-inner">
-                <div class="carousel-item active">
+                <div 
+                    v-for="(group, groupIndex) in chunkedProducts" 
+                    :key="groupIndex"
+                    class="carousel-item" 
+                    :class="{ active: groupIndex === 0 }">
                     <div class="carousel-grid">
-                        <div class="rec-card">
-                            <img src="https://via.placeholder.com/120x120?text=S24+Violet" alt="S24 Violet">
-                            <span class="rec-category">SMART PHONE</span>
-                            <h4 class="rec-name">Samsung Galaxy S24 Ultra Titanium Violet</h4>
-                            <div class="rec-price">$ 1,329.00</div>
-                            <button class="view-more-btn bg-primary">ព័ត៌មានលម្អិត</button>
-                        </div>
-                        <div class="rec-card">
-                            <img src="https://via.placeholder.com/120x120?text=S24+Ultra" alt="S24 Ultra">
-                            <span class="rec-category">SMART PHONE</span>
-                            <h4 class="rec-name">Samsung Galaxy S24 Ultra</h4>
-                            <div class="rec-price">$ 1,099.99</div>
-                            <button class="view-more-btn bg-primary">ព័ត៌មានលម្អិត</button>
-                        </div>
-                        <div class="rec-card">
-                            <img src="https://via.placeholder.com/120x120?text=PC+Gaming" alt="PC Gaming">
-                            <span class="rec-category">PC</span>
-                            <h4 class="rec-name">iphone 16PC Gaming Case pro max</h4>
-                            <div class="rec-price">$ 499.00</div>
-                            <button class="view-more-btn bg-primary">ព័ត៌មានលម្អិត</button>
-                        </div>
-                    </div>
-                </div>
-        
-                <div class="carousel-item">
-                    <div class="carousel-grid">
-                        <div class="rec-card">
-                            <img src="https://via.placeholder.com/120x120?text=Macbook" alt="Macbook">
-                            <span class="rec-category">LAPTOP</span>
-                            <h4 class="rec-name">MacBook Pro M3 Max 14-inch</h4>
-                            <div class="rec-price">$ 2,499.00</div>
-                            <button class="view-more-btn bg-primary">ព័ត៌មានលម្អិត</button>
-                        </div>
-                        <div class="rec-card">
-                            <img src="https://via.placeholder.com/120x120?text=Keyboard" alt="Keyboard">
-                            <span class="rec-category">ACCESSORIES</span>
-                            <h4 class="rec-name">Mechanical Gaming Keyboard RGB</h4>
-                            <div class="rec-price">$ 89.00</div>
-                            <button class="view-more-btn bg-primary">ព័ត៌មានលម្អិត</button>
-                        </div>
-                        <div class="rec-card">
-                            <img src="https://via.placeholder.com/120x120?text=Headset" alt="Headset">
-                            <span class="rec-category">AUDIO</span>
-                            <h4 class="rec-name">Wireless Noise Cancelling Headset</h4>
-                            <div class="rec-price">$ 199.00</div>
-                            <button class="view-more-btn bg-primary">ព័ត៌មានលម្អិត</button>
+                        <div v-for="product in group" :key="product.id" class="rec-card">
+                            <img class="image" :src="product.image" :alt="product.title">
+                            <h6 class="rec-name">{{ product.title }}</h6>
+                            <span class="rec-price">$ {{ product.price }}</span>
+                            
+                            <router-link :to="`/detailpage/${product.id}`"  class="view-more-btn bg-primary text-decoration-none text-center">
+                                ព័ត៌មានលម្អិត
+                            </router-link>
                         </div>
                     </div>
                 </div>
@@ -156,16 +91,72 @@
 
         <div class="btn-shopping-action d-flex justify-content-between">
             <router-link to="/" class="continue-shopping-btn bg-primary text-decoration-none">មើលផលិតផលផ្សេងទៀត</router-link>
-        
             <button class="continue-shopping-btn bg-primary" @click="$router.go(-1)">ថយក្រោយ</button>
         </div> 
     </div>
-
     <Footer></Footer>
 </template>
 
 <script setup>
     import Footer from './layout/Footer.vue';
+    import { storeToRefs } from 'pinia'; 
+    import { useCart } from '@/stores/addToCart.js';
+    import { useProductStore } from '@/stores/products';
+    import { onMounted, nextTick, computed } from 'vue';
+    const productStore = useProductStore();
+    const { products } = storeToRefs(productStore);
+
+    import Carousel from 'bootstrap/js/dist/carousel'; 
+    // បង្កើត Logic សម្រាប់ហែក Array ធំ ទៅជា Array តូចៗ (ក្នុង ១ Array មាន ៣ ផលិតផល)
+    const chunkedProducts = computed(() => {
+    const chunks = [];
+    if (products.value && products.value.length > 0) {
+        for (let i = 0; i < products.value.length; i += 3) {
+        chunks.push(products.value.slice(i, i + 3));
+        }
+    }
+    return chunks;
+    });
+    onMounted(async () => {
+        await productStore.fetchProduct();
+        await nextTick();
+        
+        const carouselEl = document.querySelector('#productCarousel');
+        if (carouselEl) {
+            // ជួរទី ១៩៖ លុបពាក្យ bootstrap. ចេញ គឺហៅប្រើ Carousel(...) ផ្ទាល់តែម្ដង
+            const carousel = new Carousel(carouselEl, {
+                interval: 3000,
+                ride: 'carousel',
+                wrap: true
+            });
+            carousel.cycle();
+        }
+    });
+
+
+    // ហៅ Store មកប្រើ
+    const cartStore = useCart();
+    
+    // ទាញយក State មកប្រើជា Reactive ដោយប្រើ storeToRefs
+    const { cartItems, totalCartItems, totalCartPrice } = storeToRefs(cartStore);
+    console.log(cartItems)
+    // ហៅ Actions ពី Store មកប្រើផ្ទាល់លើ Button ក្នុង Template បានភ្លាមៗ
+    const updateQty = (id, newQty) => {
+        cartStore.updateQty(id, newQty);
+    };
+
+    const removeItem = (id) => {
+        if (confirm('តើអ្នកពិតជាចង់លុបទំនិញនេះចេញពីកន្ត្រកមែនទេ?')) {
+            cartStore.removeItem(id); // ហៅ Action ពី Pinia ឱ្យមកលុប
+        }
+    };
+
+    const clearCart = () => {
+        if (confirm('តើអ្នកពិតជាចង់សម្អាតកន្ត្រកទំនិញទាំងមូលមែនទេ?')) {
+            cartStore.clearCart();
+        }
+    };
+
 </script>
 
 <style scoped>
@@ -177,6 +168,10 @@
         font-size: 18px;
         background-color: #f6f9fc;
         color: #333333 !important;   
+    }
+    .image{
+        height: 90px !important;
+        object-fit: cover;
     }
     .layout-wrapper {
         padding: 0 7%;
@@ -260,7 +255,7 @@
 
     /* Counter UI */
     .quantity-selector {
-        display: flex;
+        display: inline-flex; /* បន្ថែមនេះដើម្បីឱ្យ elements ខាងក្នុងរៀបជួរដេកបានស្អាត */
         align-items: center;
         border: 1px solid #ced4da;
         border-radius: 8px;
@@ -272,23 +267,28 @@
     .qty-btn {
         background: transparent;
         border: none;
-        width: 28px;
+        /* លុប width: 28px; ចេញ ហើយជំនួសដោយ padding វិញ */
+        padding: 0 12px; 
         height: 26px;
         cursor: pointer;
-        font-size: 14px;
+        font-size: 16px;
         color: #444;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
     .qty-input {
-        width: 32px;
-        height: 26px;
+        display: inline-block;
+        min-width: 30px;   /* ទំហំតូចបំផុតពេលមានលេខ ១ខ្ទង់ */
+        max-width: 150px;  /* ទំហំធំបំផុតការពារកុំឱ្យរីកវែងពេក */
+        height: 30px;
+        line-height: 30px;
         text-align: center;
+        padding: 0 8px;    /* បន្ថែមគម្លាតឆ្វេងស្តាំ */
         border-left: 1px solid #ced4da;
         border-right: 1px solid #ced4da;
-        border-top: none;
-        border-bottom: none;
-        /* font-size: 13px; */
-        background: transparent;
+        outline: none;     
     }
 
     /* Actions Section right aligned */
@@ -386,9 +386,10 @@
     }
 
     .rec-card {
+        max-height: 250px;
         background: #fff;
         border-radius: 8px;
-        padding: 20px 16px;
+        padding: 16px;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -396,23 +397,18 @@
     }
 
     .rec-card img {
-        max-height: 120px;
+        max-height: 100px;
         object-fit: contain;
-        /* margin-bottom: 16px; */
+        margin-bottom: 16px;
     }
 
-    .rec-category {
-        font-size: 16px;
-        color: #666;
-        margin-bottom: 4px;
-    }
 
     .rec-name {
         font-size: 16px;
         color: #444;
-        height: 38px;
+        /* height: 38px; */
         overflow: hidden;
-        margin-bottom: 16px;
+        /* margin-bottom: 16px; */
     }
 
     .rec-price {
@@ -427,7 +423,7 @@
         color: white;
         border: none;
         border-radius: 8px;
-        padding: 6px 14px;
+        padding: 4px 14px;
         font-size: 18px;
         transition: 0.8s;
     }

@@ -5,7 +5,7 @@
         </div>
 
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
-            
+        
             <div class="col" v-for="product in products" :key="product.id">
                 <div class="product-card-exact">
                     <div class="badge-container"><span class="badge-red-exact">{{product.condition}}</span></div>
@@ -14,13 +14,13 @@
                         <img :src="product.image" alt="Smart Watch">
                     </div>
 
-                    <router-link to="/addtoCart" class="btn-cart">
+                    <a @click="handleFormSubmit(product)" class="btn-cart text-decoration-none">
                         <i class="bi bi-cart3 cart"></i>
-                    </router-link>
+                    </a>
 
-                    <div class="card-body-content">
+                    <div class="card-body-content d-flex justify-content-between">
                         <div class="exact-info-title">{{product.title}}</div>
-                        <div class="exact-info-brand">{{product.description}}</div>
+                        <div class="exact-info-brand text-start">{{product.description}}</div>
                         <div class="exact-price-box">
                             <span class="exact-price-current">$ {{product.price}}</span>
                         </div>
@@ -41,6 +41,7 @@
     import { onMounted, ref, watch } from 'vue';
     import { storeToRefs } from 'pinia'; // ជួយរក្សាភាព Reactive ពេលទាញយក state មកប្រើ
     import { useProductStore } from '@/stores/products';
+    import { useCart } from '@/stores/addToCart';
     
     const productStore = useProductStore();
     // ទាញយក products state ពី store មកប្រើដោយប្រើ storeToRefs
@@ -50,11 +51,46 @@
         await productStore.fetchProduct();
     });
     // console.log(products)
-    
+
+
+    ////////add to cart គ្រប់គ្រងការ Add to Cart 
+    const cartStore = useCart(); 
+    const { formData } = storeToRefs(cartStore);
+
+    // កែត្រង់នេះ៖ ទទួលយក Object ផលិតផលផ្ទាល់ពីប៊ូតុងដែលយើងចុច
+    const handleFormSubmit = async (product) => {
+        if (!product || !product.id) {
+            alert("រកមិនឃើញទិន្នន័យផលិតផលនេះទេ!");
+            return;
+        }
+
+        // ផ្តល់តម្លៃ id ទៅឲ្យ Pinia store 
+        formData.value.product_id = product.id;
+
+        // រៀបចំទិន្នន័យឲ្យមានសុវត្ថិភាពការពារតម្លៃទទេ
+        const safeProduct = {
+            id: product.id,
+            title: product.title || 'មិនមានឈ្មោះ',
+            description: product.description || 'មិនមានការពិពណ៌នា',
+            condition: product.condition || 'ថ្មី',
+            image: product.image || '',
+            price: Number(product.price) || 0 
+        };
+
+        try {
+            // ហៅទៅកាន់ Actions របស់ Cart Store ដើម្បីរក្សាទុក
+            cartStore.pushToLocalCart(safeProduct, 1); // លេខ 1 គឺចំនួន (Quantity) លំនាំដើម
+            await cartStore.addToCart(); 
+            
+            alert("បានថែមផលិតផលទៅក្នុងកន្ត្រកហើយ!");
+        } catch (error) {
+            console.error("មានបញ្ហាពេលថែមចូលកន្ត្រក៖", error);
+        }
+    };
 </script> 
 
 <style>
-    .product-card-exact .cart{
+    .product-card-exact .btn-cart{
         display: inline-block;
         text-align: center;
         color: white;
@@ -68,11 +104,11 @@
         opacity: 0;
         transition: 0.8s;
     }
-    .product-card-exact:hover .cart{
+    .product-card-exact:hover .btn-cart{
         opacity: 1;
         top: 16px;
     }
-    .product-card-exact .cart:hover{
+    .product-card-exact .btn-cart:hover{
         color: black;
         background-color: white;
         box-shadow: 0px 0px 5px #2768f4;
