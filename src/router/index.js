@@ -33,6 +33,8 @@ const router = createRouter({
         title: "Home",
       },
     },
+    
+   
 
     // {
     //   path: "/about",

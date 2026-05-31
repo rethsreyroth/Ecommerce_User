@@ -290,6 +290,7 @@ onMounted(() => {
   <Navbar></Navbar>
   <body>
     <div class="container min-vh-100">
+     
       <div class="row">
         <!-- SIDEBAR -->
         <div class="col-lg-3 sidebar">
