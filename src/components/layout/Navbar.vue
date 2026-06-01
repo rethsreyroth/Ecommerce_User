@@ -351,7 +351,7 @@ a {
 
     onMounted(async () => {
         await productStore.fetchProduct();
-        await profileStore.getProfile();
+        // await profileStore.getProfile();
     });
 
 
