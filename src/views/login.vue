@@ -217,7 +217,7 @@
                 loading.value = false;
               }
             
-            };
+            
             // try{
             //     showToast('ចូលគណនីបានដោយជោគជ័យ', 'success')         
             //     // router.push('/')
