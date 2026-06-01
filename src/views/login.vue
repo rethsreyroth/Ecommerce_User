@@ -1,5 +1,7 @@
+<!-- Form login -->
 
 <template>
+<!-- <<<<<<< HEAD -->
     <div class="container min-vh-100 d-flex justify-content-center align-items-center">
         <div class="card shadow-lg border-0 rounded-5 p-4 w-100" style="max-width: 520px;">
             <div class="text-center mb-4">
@@ -29,15 +31,11 @@
                     ភ្លេចពាក្យសម្ងាត់?
                     </router-link>
                 </div>
-<!-- <<<<<<< HEAD -->
                 <!-- <a class="text-center text-dark">មិនមានគណនី?<span class=" text-primary">បង្កើតគណនី</span> </a> -->
                 <RouterLink to="/register">បង្កើតគណនី</RouterLink>
-<!-- ======= -->
                 <!-- <button class="btn btn-primary w-100 py-2"> -->
-<!-- ======= -->
                 <!-- <button class="btn btn-primary w-100 py-2">
                 <a class="text-center text-dark">មិនមានគណនី?<span class=" text-primary">បង្កើតគណនី</span> </a> -->
-<!--  -->
                 
                 <RouterLink to="/register">បង្កើតគណនី</RouterLink>
                 <button class="btn btn-primary w-100 py-2">
@@ -56,6 +54,8 @@
                 </div>
                 
             </form>
+            </div>
+            </div>
   <div class="signin-container">
     <div class="signin-card">
       <div class="signin-header">
@@ -77,7 +77,6 @@
             />
           </div>
           <small class="text-danger">{{ form.errors.email }}</small>
->>>>>>> 9b398ca49f61f988d299474fd74c27a3b881b2d9
         </div>
 
         <div class="form-group">
@@ -217,7 +216,7 @@
                 loading.value = false;
               }
             
-            
+
             // try{
             //     showToast('ចូលគណនីបានដោយជោគជ័យ', 'success')         
             //     // router.push('/')
