@@ -318,8 +318,8 @@ const startCountdown = () => {
 /* Title */
 .title {
   text-align: center;
-  font-size: 52px;
-  font-weight: 700;
+  font-size: 42px;
+  font-weight: 600;
   margin-top: 45px;
   color: #111;
 }
@@ -333,7 +333,7 @@ const startCountdown = () => {
 /* Description */
 .description {
   text-align: center;
-  font-size: 25px;
+  font-size: 20px;
   color: #555;
   margin-top: 45px;
 }
@@ -365,7 +365,7 @@ const startCountdown = () => {
   border: none;
   border-radius: 12px;
   color: white;
-  font-size: 24px;
+  font-size: 20px;
   display: block;
   margin: 60px auto 0;
   cursor: pointer;
@@ -383,7 +383,7 @@ const startCountdown = () => {
 .resend-text {
   text-align: center;
   margin-top: 18px;
-  font-size: 24px;
+  font-size: 20px;
   color: #333;
   cursor: pointer;
   font-family: "Kantumruy Pro", sans-serif;

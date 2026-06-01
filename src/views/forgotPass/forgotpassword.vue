@@ -252,8 +252,8 @@ const submitForm = async () => {
 /* Title */
 .title {
   text-align: center;
-  font-size: 52px;
-  font-weight: 700;
+  font-size: 42px;
+  font-weight: 600;
   color: #111111;
   margin-top: 45px;
 }
@@ -277,7 +277,7 @@ const submitForm = async () => {
 .form-label {
   display: block;
   font-size: 25px;
-  font-weight: 600;
+  font-weight: 400;
   color: #222222;
   margin-bottom: 14px;
 }
