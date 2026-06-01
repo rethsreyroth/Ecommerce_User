@@ -174,39 +174,6 @@ const updateProfile = async () => {
     loading.value = false;
   }
 };
-// const updateProfile = async () => {
-//   if (!validateForm()) {
-//     return;
-//   }
-
-//   try {
-//     loading.value = true;
-
-//     const response = await api.put("/api/profile/info", {
-//       name: form.name,
-//       email: form.email,
-//       phone: form.phone,
-//       location: form.location,
-//     });
-
-//     console.log(response.data);
-
-//     successMessage.value = response.data.message || "Update Success";
-
-//     alert(response.data.message || "Profile Updated");
-//   } catch (error) {
-//     console.log(error);
-
-//     alert(error.response?.data?.message || "Update Failed");
-//   } finally {
-//     loading.value = false;
-//   }
-// };
-
-// ===========================
-// UPDATE PROFILE IMAGE
-// API => /api/profile/image
-// ===========================
 
 const updateProfileImage = async () => {
   if (!form.image) {
@@ -629,7 +596,7 @@ body {
   height: 120px;
   border-radius: 50%;
   object-fit: cover;
-  border: 4px solid #0d6efd;
+  border: 2px solid #0d6efd;
 }
 
 .nav-link {
@@ -658,6 +625,7 @@ body {
   color: white !important;
 
   /* background: #0d6dfd; */
+/* ======= */
 }
 
 .card-ui {

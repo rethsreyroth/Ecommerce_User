@@ -14,6 +14,8 @@ import Login from "@/views/login.vue";
 // import Checkout from "@/views/Checkout.vue";
 // import Success from "@/views/Success.vue";
 import Profile from "@/views/Profile.vue";
+import ContactUS from "@/views/ContactUS.vue";
+import AddtoCart from "@/components/AddtoCart.vue";
 
 import ForgotPassword from "@/views/forgotPass/forgotpassword.vue";
 import ResetPassword from "@/views/forgotPass/resetpassword.vue";
@@ -45,14 +47,14 @@ const router = createRouter({
     //   },
     // },
 
-    // {
-    //   path: "/contactUS",
-    //   name: "contactUS",
-    //   component: () => import("../views/ContactView.vue"),
-    //   meta: {
-    //     title: "Contact Us",
-    //   },
-    // },
+    {
+      path: "/contactUS",
+      name: "contactUS",
+      component: ContactUS,
+      meta: {
+        title: "Contact Us",
+      },
+    },
 
     {
       path: "/register",
@@ -73,7 +75,6 @@ const router = createRouter({
         guestOnly: true,
       },
     },
-
     {
       path: "/profile",
       name: "profile",
@@ -83,26 +84,22 @@ const router = createRouter({
         requiresAuth: true,
       },
     },
-// <<<<<<< HEAD
-    
-   
-// =======
-
-    // {
-    //   path: "/detail",
-    //   name: "detail",
-    //   component: DetailPage,
-    //   meta: {
-    //     title: "Detail",
-    //   },
-    // },
-
     // {
     //   path: "/checkout",
     //   name: "checkout",
     //   component: Checkout,
     //   meta: {
     //     title: "Checkout",
+    //     requiresAuth: true,
+    //   },
+    // },
+
+    // {
+    //   path: "/success",
+    //   name: "success",
+    //   component: Success,
+    //   meta: {
+    //     title: "Success",
     //     requiresAuth: true,
     //   },
     // },
@@ -133,6 +130,23 @@ const router = createRouter({
         title: "Reset Password",
       },
     },
+    // {
+    //   path: "/detailpage/:id",
+    //   name: "detailpage",
+    //   component: DetailPage,
+    //   meta: {
+    //     title: "Detail Page",
+    //   },
+    // },
+    {
+      path: "/addtoCart",
+      name: "addtoCart",
+      component: AddtoCart,
+      meta: {
+        title: "Cart",
+        requiresAuth: true,
+      },
+    },
   ],
 });
 
@@ -145,6 +159,9 @@ router.beforeEach((to) => {
   // Protect routes
   if (to.meta.requiresAuth && !auth.token) {
     return "/login";
+  }
+  if(auth.token && to.path == '/login'){
+    return '/'
   }
 
 

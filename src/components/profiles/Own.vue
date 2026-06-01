@@ -292,7 +292,7 @@ const saveProduct = async () => {
         },
       });
 
-      alert(response.data.message || "Add Product Success");
+      alert(response.data.message || "បន្ថែមផលិតផលបានជោគជ័យ");
     }
 
     // =====================================
