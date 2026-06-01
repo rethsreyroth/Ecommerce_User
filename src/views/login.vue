@@ -45,10 +45,12 @@
                     បង្កើតគណនី
                     </router-link>
                 </div>
+                
             </form>
         </div>
     </div>
 </template>
+
 <script setup>
     import {reactive,ref} from 'vue';
     import router from '@/router';

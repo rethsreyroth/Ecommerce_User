@@ -130,14 +130,14 @@ const router = createRouter({
         title: "Reset Password",
       },
     },
-    // {
-    //   path: "/detailpage/:id",
-    //   name: "detailpage",
-    //   component: DetailPage,
-    //   meta: {
-    //     title: "Detail Page",
-    //   },
-    // },
+    {
+      path: "/detailpage/:id",
+      name: "detailpage",
+      component: DetailPage,
+      meta: {
+        title: "Detail Page",
+      },
+    },
     {
       path: "/addtoCart",
       name: "addtoCart",
