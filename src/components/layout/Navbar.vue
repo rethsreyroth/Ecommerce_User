@@ -198,7 +198,7 @@ a {
                         <i class="bi bi-search"></i>
                     </router-link>
 
-                    <a v-if="auth.token" @click.prevent="`isSearchOpen = true`" 
+                    <a v-if="Token" @click.prevent="`isSearchOpen = true`" 
                         class="nav-link d-flex align-items-start text-decoration-none">
                         <img :src="imagePreview" class="profile-img"/>
                         <ul class="dropdown">
@@ -262,7 +262,7 @@ a {
             <i class="bi bi-search"></i>
         </router-link>
 
-        <div v-if="auth.token" @click.prevent="`isSearchOpen = true`" 
+        <div v-if="Token" @click.prevent="`isSearchOpen = true`" 
             class="nav-item">
             <img :src="imagePreview" class="profile-img mb-1"/>
             <ul class="nav-dropdown text-start">
@@ -279,7 +279,7 @@ a {
         </div>
 
         <!-- Login -->
-        <router-link v-else to="/login" class="btn btn-outline-primary rounded-pill nav-item px-4">
+        <router-link v-else to="/login" class="btn btn-outline-primary rounded-pill px-4">
             Login
         </router-link>
     </div>
@@ -314,6 +314,9 @@ a {
     import { useRouter } from 'vue-router';
     import { useCart } from '@/stores/addToCart';
     let auth = useauthStore();
+    const {token} = storeToRefs(auth)
+    let Token = ref(token);
+    console.log(token.value)
     let isSearchOpen = ref(false);
     const cartStore = useCart();
     const { totalCartItems } = storeToRefs(cartStore);
@@ -343,15 +346,17 @@ a {
 
     //////get profile image
     const profileStore = useProfileStore();
-    // 1. ចាប់យកឈ្មោះ imagePreview ឱ្យត្រូវនឹងឈ្មោះនៅក្នុង Store ផ្ទាល់តែម្តង
-    let { imagePreview } = storeToRefs(profileStore);
-
-
     onMounted(async () => {
         await productStore.fetchProduct();
-        // await profileStore.getProfile();
     });
-
+    // if(Token.value){
+        onMounted(async()=>{
+            await profileStore.getProfile();
+        });
+        // ចាប់យកឈ្មោះ imagePreview ឱ្យត្រូវនឹងឈ្មោះនៅក្នុង Store ផ្ទាល់តែម្តង
+        let { imagePreview } = storeToRefs(profileStore);
+        console.log(imagePreview)
+    // }
 
     /////////////log out///////////////
     const showLogoutModal = ref(false);
