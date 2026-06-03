@@ -262,7 +262,7 @@ a {
             <i class="bi bi-search"></i>
         </router-link>
 
-        <div v-if="auth.token" @click.prevent="`isSearchOpen = true`" 
+        <div v-if="token" @click.prevent="`isSearchOpen = true`" 
             class="nav-item">
             <img :src="imagePreview" class="profile-img mb-1"/>
             <ul class="nav-dropdown text-start">
@@ -359,7 +359,7 @@ a {
     const handleLogout = () => {
         showLogoutModal.value = true;
     }
-
+    
     const confirmLogout = () => {
         auth.Logout();
         showLogoutModal.value = false;
@@ -369,6 +369,8 @@ a {
     const cancelLogout = () => {
         showLogoutModal.value = false;
     }
+
+    const token = ref(auth.token)
 </script>
 
 <style>
