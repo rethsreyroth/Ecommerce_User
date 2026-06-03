@@ -10,7 +10,7 @@ import verityOtp from '@/views/forgotPass/verityOtp.vue'
 import profile from '@/views/Profile.vue'
 import Register from "@/views/register.vue";
 import Login from "@/views/login.vue";
-// import DetailPage from "../components/DetailPage.vue";
+import DetailPage from "../components/DetailPage.vue";
 // import Checkout from "@/views/Checkout.vue";
 // import Success from "@/views/Success.vue";
 import Profile from "@/views/Profile.vue";
