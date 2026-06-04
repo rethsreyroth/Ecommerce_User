@@ -1,19 +1,4 @@
 import { createRouter, createWebHistory } from "vue-router";
-<<<<<<< HEAD
-import HomeView from "../views/HomeView.vue";
-import register from "@/views/register.vue";
-import login from "@/views/login.vue";
-import profile from "@/views/Profile.vue";
-import DetailPage from "../components/DetailPage.vue";
-import { useauthStore } from "@/stores/auth";
-import forgotpassword from '@/views/forgotPass/forgotpassword.vue'
-import resetpassword from '@/views/forgotPass/resetpassword.vue'
-import verityOtp from '@/views/forgotPass/verityOtp.vue'
-import Shop from '@/views/shop/shopPage.vue'
-// import resetpassword from '@/views/forgotPassword/resetpassword.vue'
-// import resetPassword from '@/views/forgotPassword/resetPassword.vue'
-=======
->>>>>>> 2961b14ba9db9efb8314e0849f7984093fbc224d
 
 import HomeView from "../views/HomeView.vue";
 import Register from "@/views/register.vue";
@@ -26,7 +11,7 @@ import Profile from "@/views/Profile.vue";
 import ForgotPassword from "@/views/forgotPass/forgotpassword.vue";
 import ResetPassword from "@/views/forgotPass/resetpassword.vue";
 import VerityOtp from "@/views/forgotPass/verityOtp.vue";
-
+import Shop from "@/views/shop/shopPage.vue";
 import { useauthStore } from "@/stores/auth.js";
 
 const router = createRouter({

@@ -3,260 +3,241 @@
     <Navbar />
     <main class="container my-5">
         
-        <section class="hero-banner row align-items-center px-4 py-5 p-md-5 mb-5 mx-0 position-relative">
-            <div class="col-md-6 order-2 order-md-1 text-center text-md-start">
-                <h1 class="hero-title fw-bold text-primary mb-3">សម្រាប់ជីវិតឌីជីថលរបស់អ្នក</h1>
-                <p class="hero-desc text-muted mb-4">
-                    ស្វែងរក Laptop, Gaming PC និងគ្រឿងបន្លាស់ជាច្រើនប្រភេទ ទំនើប ជាមួយតម្លៃសមរម្យ
-                </p>
-                <div class="d-flex justify-content-center justify-content-md-start gap-2">
-                    <button class="btn btn-primary px-4 btn-sm rounded-2"><i class="bi bi-cart-fill me-2"></i>ទិញឥឡូវនេះ</button>
-                    <button class="btn btn-outline-secondary px-4 btn-sm rounded-2">ព័ត៌មានបន្ថែម</button>
-                </div>
-            </div>
-            <div class="col-md-6 order-1 order-md-2 text-center mb-4 mb-md-0">
-            <img src="/public/khalilah-left_1_1_1.avif" class="w-100" alt="">
-            </div>
-        </section>
+      <section class="featured-products mb-5">
+        <div class="d-flex justify-content-between align-items-end mb-4 border-bottom pb-3">
+          <div>
+            <h2 class="section-title fw-bold text-dark mb-1">ផលិតផលលេចធ្លោ</h2>
+            <p class="text-muted small mb-0">គ្រឿងអេឡិចត្រូនិកជំនាន់ថ្មីដែលទទួលបានការនិយមចូលចិត្តបំផុត</p>
+          </div>
+          <button class="btn btn-view-all btn-sm fw-semibold">មើលទាំងអស់ <i class="bi bi-chevron-right small"></i></button>
+        </div>
 
-        <section class="section-header mb-4">
-          <h2 class="fw-bold section-title text-dark mb-1">ផលិតផលពិសេស </h2>
-          <p class="text-muted small">ឧបករណ៍បច្ចេកវិទ្យាដែលពេញនិយមបំផុតសម្រាប់ជីវិតសម័យថ្មី</p>
-            {{ productsStore.products }}
-        </section>
-
-        <section class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xl-4 g-4">
-          <div class="col" v-for="product in products" :key="product.id">
-            <div class="card h-100 product-card border-0 position-relative overflow-hidden shadow-sm">
+        <div class="row g-4">
+          <div class="col-6 col-md-4 col-lg-3" v-for="product in products" :key="product.id">
+            <div class="card product-card h-100">
               
-              <div class="image-wrapper position-relative overflow-hidden">
-                <img :src="product.image" :alt="product.title" class="product-thumb">
+              <div class="card-img-wrapper position-relative">
+                <div class="badge-tags position-absolute top-0 start-0 m-2 d-flex flex-column gap-1">
+                  <span v-if="product.isBestseller" class="badge-custom bg-danger">Bestseller</span>
+                  <span v-if="product.isSale" class="badge-custom bg-primary">Sale</span>
+                </div>
                 
-                <!-- <div class="badge-group d-flex flex-column gap-1 position-absolute top-0 start-0 m-3">
-                  <span class="badge bg-danger badge-custom badge-top-color" v-if="product.badgeTop">{{ product.badgeTop }}</span>
-                  <span class="badge bg-secondary badge-custom badge-bottom-color" v-if="product.badgeBottom">{{ product.badgeBottom }}</span>
-                </div> -->
+                <img :src="product.image" class="product-img" :alt="product.title" @error="handleImageError">
 
-                <button @click="addToCart(product)" class="hover-cart-btn position-absolute border-0 d-flex align-items-center justify-content-center shadow">
-                  <i class="bi bi-cart3 fs-6 text-white"></i>
+                <button @click="addToCart(product)" class="btn btn-circle-cart-hover" title="ថែមក្នុងកន្ត្រក">
+                  <i class="bi bi-cart-plus"></i>
                 </button>
               </div>
-              <div class="card-body p-3 d-flex flex-column justify-content-between">
-                <div>
-                  <span class="brand-text text-muted text-uppercase mb-1 d-block">{{ product.brand }}</span>
-                  <h5 class="product-name text-dark fw-semibold text-truncate mb-1" :title="product.title">
-                    {{ product.title }}
-                  </h5>
 
-                  <div class="rating-container d-flex align-items-center mb-2 text-warning">
-                    <div class="stars d-flex gap-1 me-2">
-                      <i class="bi bi-star-fill small" v-for="n in 5" :key="n"></i>
-                    </div>
-                    <span class="review-text text-muted small">({{ product.reviews }})</span>
-                  </div>
-
-                  <div class="price-container d-flex align-items-baseline gap-2 mb-3">
-                      <span class="current-price fw-bold text-dark">{{ product.price }}</span>
-                      <span class="old-price text-muted small text-decoration-line-through" v-if="product.condition">
-                        {{ product.condition }}
-                      </span>
-                  </div>
+              <div class="card-body p-3 d-flex flex-column bg-white">
+                <span class="product-brand mb-1">{{ product.brand }}</span>
+                <h5 class="product-title fw-semibold text-dark mb-2">{{ product.title }}</h5>
+                
+                <div class="d-flex align-items-center text-warning gap-1 mb-2" style="font-size: 0.8rem;">
+                  <i class="bi bi-star-fill"></i>
+                  <i class="bi bi-star-fill"></i>
+                  <i class="bi bi-star-fill"></i>
+                  <i class="bi bi-star-fill"></i>
+                  <i class="bi bi-star-fill"></i>
+                  <span class="text-muted fw-normal small ms-1">({{ product.reviews }})</span>
+                </div>
+                
+                <div class="price-box mb-3">
+                  <span class="current-price fw-bold text-dark">{{ product.price }}</span>
+                  <span v-if="product.condition" class="old-price text-muted text-decoration-line-through ms-2 small">{{ product.condition }}</span>
                 </div>
 
-                <div class="card-actions d-flex align-items-center justify-content-between gap-2">
-                    <span class="stock-text text-success small fw-medium">
-                      <i class="bi bi-check-circle-fill me-1"></i>មាននៅក្នុងស្តុក
-                    </span>
-                    <button class="btn btn-primary btn-sm px-2 action-btn buy-btn">ព័ត៌មានលម្អិត</button>
+                <div class="mt-auto d-flex align-items-center justify-content-between">
+                  <span class="stock-status text-success fw-medium">
+                    <i class="bi bi-check-circle-fill me-1 small"></i>មានក្នុងស្តុក
+                  </span>
+                  
+                  <button @click="viewDetails(product)" class="btn btn-details">
+                    ព័ត៌មានលម្អិត
+                  </button>
                 </div>
               </div>
 
             </div>
           </div>
-        </section>
+        </div>
+      </section>
+
     </main>
     <Footer/>
   </div>
 </template>
 
 <script setup>
-
 import { ref, onMounted } from 'vue'
 import { useauthStore } from '@/stores/auth'
 import Navbar from '@/components/layout/Navbar.vue';
 import Footer from '@/components/layout/Footer.vue';
 import { useProductStore } from '@/stores/products';
+
 const productsStore = useProductStore();
 const auth = useauthStore(); 
 
+const defaultImage = ref('https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500&q=80')
+
+const products = ref([
+  { id: 1, title: 'iPhone 15 Pro', brand: 'Apple', price: 'BDT 119,900', condition: 'BDT 131,900', reviews: 1247, image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500&q=80', isBestseller: true, isSale: true },
+  { id: 2, title: 'MacBook Pro 16-inch', brand: 'Apple', price: 'BDT 299,900', condition: '', reviews: 892, image: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=500&q=80', isBestseller: false, isSale: false },
+  { id: 3, title: 'Sony WH-1000XM5', brand: 'Sony', price: 'BDT 47,900', condition: 'BDT 53,900', reviews: 2156, image: 'https://images.unsplash.com/photo-1546435770-a3e426bf472b?w=500&q=80', isBestseller: true, isSale: true }
+])
+
 onMounted( async ()  => {
   await productsStore.fetchProduct();
-  console.log(productsStore.products);
+  if(productsStore.products && productsStore.products.length > 0) {
+    products.value = productsStore.products.slice(0, 8); 
+  }
 })
-const addToCart = (product) => {
-  console.log(product.title)
+
+const handleImageError = (event) => {
+  event.target.src = defaultImage.value;
 }
 
+const addToCart = (product) => {
+  console.log('បានបន្ថែមទៅក្នុងកន្ត្រក៖', product.title)
+}
 
+const viewDetails = (product) => {
+  console.log('មើលព័ត៌មានលម្អិតនៃ៖', product.title)
+}
 </script>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Kantumruuy+Pro:wght@300;400;500;600;700&display=swap');
-@import url('https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css');
-
 .shop-page {
   font-family: 'Kantumruuy Pro', sans-serif;
-  background-color: #fafafa;
+  background-color: #ffffff;
   min-height: 100vh;
 }
 
-/* Navbar */
-.search-input {
-  padding-left: 2.2rem;
-  border-radius: 20px;
-  background-color: #f0f2f5;
-  border: none;
-  font-size: 0.85rem;
-  width: 260px;
-}
-.search-icon {
-  left: 12px;
-  z-index: 4;
-}
-.nav-link {
-  color: #65676b;
-  font-size: 0.9rem;
-  text-decoration: none;
-  font-weight: 500;
-  transition: color 0.2s;
-}
-.nav-link:hover, .nav-link.active {
-  color: #0d6efd;
+.section-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #111111;
 }
 
-/* Banner Section */
-.hero-banner {
-  background-color: #fff;
-  border: 1.5px solid #d1c4e9;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.02);
-  min-height: 450px; 
+.btn-view-all {
+  color: #6c757d;
+  background: transparent;
+  border: none;
+  font-size: 0.88rem;
+}
+
+/* =================================================== */
+/* ផ្នែកស្ទីលកាតផលិតផល (Product Card Styles)              */
+/* =================================================== */
+
+.product-card {
+  background: #ffffff;
+  border: 1px solid #e5e7eb !important; 
+  border-radius: 12px !important;
+  overflow: hidden;
+  transition: box-shadow 0.3s ease;
+}
+
+/* ពេល Hover លើកាត គឺឡើងស្រមោលព្រាលៗពីក្រោម */
+.product-card:hover {
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08); 
+}
+
+/* ប្រអប់ផ្ទុកដុំរូបភាព */
+.card-img-wrapper {
+  background-color: #f9fafb;
+  aspect-ratio: 1.1 / 1; 
   display: flex;
   align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  border-bottom: 1px solid #f3f4f6;
 }
-.hero-title {
-  color: #1a237e !important;
-  font-size: 2.4rem;
-  line-height: 1.3;
-}
-.hero-desc {
-  font-size: 1rem;
-  line-height: 1.6;
-}
-.hero-img {
-  max-height: 380px;
-  width: auto;
+
+.product-img {
+  max-height: 85%;
+  max-width: 85%;
   object-fit: contain;
-  animation: float-animation 4s ease-in-out infinite;
 }
 
-@keyframes float-animation {
-  0% { transform: translateY(0px); }
-  50% { transform: translateY(-10px); }
-  100% { transform: translateY(0px); }
-}
-
-/* Product Cards */
-.product-card {
-  background-color: #ffffff;
-  border-radius: 12px !important;
-  transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-  box-shadow: 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-}
-
-.image-wrapper {
-  height: 210px;
-  width: 100%;
-  background-color: #4d4d4b;
-  position: relative;
-}
-
-.product-thumb {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
-}
-
-.hover-cart-btn {
-  bottom: 14px;
-  right: 14px;
+/* --------------------------------------------------- */
+/* ប៊ូតុងរង្វង់កន្ត្រកខ្មៅ (នៅចំជ្រុងខាងក្រោមស្តាំនៃប្រអប់រូបភាព) */
+/* --------------------------------------------------- */
+.btn-circle-cart-hover {
+  position: absolute;
+  bottom: 10px;               /* ទីតាំងនៅកៀនជ្រុងខាងក្រោម */
+  right: 10px;                /* ទីតាំងនៅកៀនជ្រុងខាងស្តាំ */
+  background-color: #111111 !important;
+  color: #ffffff !important;
+  border: none !important;
   width: 38px;
   height: 38px;
-  background-color: #212529;
-  border-radius: 50%;
-  z-index: 10;
+  border-radius: 50% !important; /* រាងមូលក្រឡំ */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.15rem;
+  cursor: pointer;
+  z-index: 5;
+  
+  /* ស្ថានភាពដើម៖ លាក់ខ្លួន និងស្រុតចុះក្រោមបន្តិច */
   opacity: 0;
-  transform: translateY(8px) scale(0.9);
-  transition: all 0.35s cubic-bezier(0.165, 0.84, 0.44, 1);
+  visibility: hidden;
+  transform: translateY(8px);
+  
+  /* ចលនាអណ្ដែតឡើង (Transition) */
+  transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), visibility 0.3s;
 }
 
-.product-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08) !important;
-}
-
-.product-card:hover .product-thumb {
-  transform: scale(1.05);
-}
-
-.product-card:hover .hover-cart-btn {
+/* ពេល Hover លើកាត -> ប៊ូតុងរង្វង់កន្ត្រកអណ្ដែតលេចចេញមកចំជ្រុង */
+.product-card:hover .btn-circle-cart-hover {
   opacity: 1;
-  transform: translateY(0) scale(1);
+  visibility: visible;
+  transform: translateY(0);
 }
 
-.hover-cart-btn:hover {
-  background-color: #000;
-  box-shadow: 0 0 12px rgba(251, 225, 52, 0.6) !important;
-  transform: scale(1.08);
+/* ពេលយក Mouse ទៅដាក់ចំពីលើប៊ូតុងរង្វង់កន្ត្រកផ្ទាល់ ឱ្យវារីកធំបន្តិច (Scale) */
+.btn-circle-cart-hover:hover {
+  transform: scale(1.12) !important;
+  background-color: #000000 !important;
 }
 
-.action-btn {
+/* --------------------------------------------------- */
+/* ប៊ូតុងចតុកោណកែងខាងក្រោម "ព័ត៌មានលម្អិត"                  */
+/* --------------------------------------------------- */
+.btn-details {
+  background-color: #111111 !important; /* ពណ៌ខ្មៅដិត */
+  color: #ffffff !important;
+  border: none !important;
   font-size: 0.8rem;
-  padding: 7px 16px;
-  border-radius: 6px;
   font-weight: 500;
-  transition: all 0.3s ease;
-}
-.buy-btn:hover {
-  background-color: #000 !important;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  padding: 6px 14px !important;
+  border-radius: 6px !important; /* ជ្រុងមូលតិចៗ */
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease !important;
 }
 
-.badge-custom {
-  font-size: 0.7rem;
-  font-weight: 500;
-  padding: 5px 12px;
-  border-radius: 20px !important;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-}
-.badge-top-color {
-  background-color: #dc3545 !important;
-}
-.badge-bottom-color {
-  background-color: #6c757d !important;
+.btn-details:hover {
+  background-color: #000000 !important; /* ពេល hover គឺដិតពណ៌ជាងមុនបន្តិច */
 }
 
-.stock-text {
-  font-size: 0.85rem;
-}
-.brand-text {
-  font-size: 0.8rem;
-}
-.product-name {
-  font-size: 1rem;
-}
-.current-price {
-  font-size: 1.05rem;
+/* ស្ទីលព័ត៌មានអត្ថបទផ្សេងៗ */
+.badge-custom { font-size: 0.68rem; font-weight: 600; padding: 3px 8px; border-radius: 4px; }
+.product-brand { font-size: 0.78rem; color: #9ca3af; text-transform: uppercase; font-weight: 500; }
+.product-title { font-size: 0.95rem; color: #111111; font-weight: 600; line-height: 1.4; }
+.text-warning { color: #ffb800 !important; }
+.current-price { font-size: 1.05rem; color: #111111; font-weight: 700; }
+.old-price { font-size: 0.82rem; color: #9ca3af; }
+.stock-status { font-size: 0.82rem; color: #10b981 !important; }
+
+/* Responsive សម្រាប់ទូរស័ព្ទដៃ (បង្ហាញប៊ូតុងកន្ត្រកជានិច្ចព្រោះអត់មាន Hover) */
+@media (max-width: 576px) {
+  .btn-circle-cart-hover { opacity: 1; visibility: visible; transform: translateY(0); width: 32px; height: 32px; font-size: 1rem; bottom: 6px; right: 6px; }
+  .product-title { font-size: 0.88rem; }
+  .current-price { font-size: 0.92rem; }
+  .btn-details { padding: 5px 10px !important; font-size: 0.75rem; }
 }
 </style>

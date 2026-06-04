@@ -14,7 +14,7 @@
                 <!-- Buy / Sell -->
                 <div class="d-flex gap-2 my-3 my-lg-0">
 
-                    <router-link to="/" class="btn btn-primary rounded-pill px-4">
+                    <router-link to="/shop-page" class="btn btn-primary rounded-pill px-4">
                         <i class="bi bi-cart me-1"></i>
                         ចង់ទិញ
                     </router-link>
@@ -26,16 +26,8 @@
 
                 </div>
 
-<<<<<<< HEAD
-                <div class="d-flex gap-2 my-2 my-lg-0 me-auto">
-                    <!-- <a href="#" class="btn-nav-outline"><i class="bi bi-cart"></i> ចង់ទិញ</a> -->
-                    <router-link to="/shop-page" class="btn-nav-outline"><i class="bi bi-shop"></i> ចង់ទិញ</router-link>
-                    <a href="#" class="btn-nav-outline"><i class="bi bi-shop"></i> ចង់លក់</a>
-                </div>
-=======
                 <!-- Menu -->
                 <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-3 mt-3 mt-lg-0">
->>>>>>> 2961b14ba9db9efb8314e0849f7984093fbc224d
 
                     <li class="nav-item">
                         <router-link to="/" class="nav-link">
