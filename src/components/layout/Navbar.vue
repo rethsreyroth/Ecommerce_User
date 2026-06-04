@@ -166,11 +166,9 @@ a {
                             ទិញ
                         </router-link>
 
-<<<<<<< HEAD
                     <router-link to="/shop-page" class="btn btn-primary rounded-pill px-4">
                         <i class="bi bi-cart me-1"></i>
                         ចង់ទិញ
-=======
                         <router-link to="/sell" class="btn btn-outline-primary rounded-pill px-3">
                             <i class="bi bi-shop me-1"></i>
                             លក់
@@ -194,7 +192,6 @@ a {
                     <router-link to="/addtoCart" class="nav-link px-2 py-0 rounded-4" style="background: #eff1f2;">
                         <i class="bi bi-cart3"></i>
                         <small>ចំនួន{{totalCartItems}}</small>
->>>>>>> dev
                     </router-link>
 
                     <!-- search -->
