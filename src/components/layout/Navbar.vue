@@ -284,8 +284,6 @@ a {
         </router-link>
     </div>
 
-
-    ///////////view profile or logout
     <div class="modal" tabindex="-1":class="{ 'show': showLogoutModal }" 
         :style="{ display: showLogoutModal ? 'block' : 'none', backgroundColor: showLogoutModal ? 'rgba(0,0,0,0.5)' : 'transparent' }"
          @click.self="cancelLogout">
@@ -336,7 +334,7 @@ a {
     console.log(search.value);
     watch(search, async(value) => {
         console.log(search.value);
-        await productStore.fetchProduct({search : value});
+        await productStore.fetchProduct({search : value});  
     })
 
     function CancelInput(){
@@ -347,6 +345,7 @@ a {
     const profileStore = useProfileStore();
     // 1. ចាប់យកឈ្មោះ imagePreview ឱ្យត្រូវនឹងឈ្មោះនៅក្នុង Store ផ្ទាល់តែម្តង
     let { imagePreview } = storeToRefs(profileStore);
+    
 
 
     onMounted(async () => {

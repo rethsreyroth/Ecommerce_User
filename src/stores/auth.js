@@ -2,6 +2,7 @@ import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 // import axios from 'axios'
 import api from '@/API/api'
+import router from '@/router'
 
 export const useauthStore = defineStore('auth', () => {
   let token = ref(localStorage.getItem('token') || null)
@@ -13,7 +14,6 @@ export const useauthStore = defineStore('auth', () => {
     try{
       const res =await api.post('/api/login', data);
       success.value = res.status;
-
       // console.log(res);
       errMassage.value = res.data.message;
       console.log(errMassage.value);
@@ -22,6 +22,7 @@ export const useauthStore = defineStore('auth', () => {
         localStorage.setItem('token', token.value)
         // alert('Login Success')
         router.push('/');
+        // router.push('/');
         return true
       }
       else{
@@ -42,6 +43,7 @@ export const useauthStore = defineStore('auth', () => {
       // console.log(res);
       token.value = res.data.data.token;
       localStorage.setItem('token', token.value)
+      router.push("/");
     }catch(err){
       console.error(err.response);
     }
@@ -51,28 +53,9 @@ export const useauthStore = defineStore('auth', () => {
       const res =await api.delete('/api/logout');
       // console.log(res);
       localStorage.removeItem('token');
+      router.push("/")
   }
-
-  
-
   return {login, Logout, register, token, success};
   })
-  
-//   const Logout = async (data) => {
-//     try {
-//         await api.delete('/api/logout', {
-//             headers: {
-//                 Accept: 'application/json',
-//                 Authorization: Bearer `${token.value}`
-//             }
-//         })
-
-//         token.value = null
-//         localStorage.removeItem('token')
-
-//     } catch (err) {
-//         console.error(err.response)
-//     }
-// }
   
 
