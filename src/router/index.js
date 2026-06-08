@@ -29,15 +29,6 @@ const router = createRouter({
       },
     },
 
-    // {
-    //   path: "/about",
-    //   name: "about",
-    //   component: () => import("../views/AboutView.vue"),
-    //   meta: {
-    //     title: "About",
-    //   },
-    // },
-
     {
       path: "/contactUS",
       name: "contactUS",
@@ -128,6 +119,9 @@ const router = createRouter({
       component: Shop,
       meta: {
         title: "shop",
+      },
+    },
+    {
       path: "/detailpage/:id",
       name: "detailpage",
       component: DetailPage,
@@ -148,7 +142,6 @@ const router = createRouter({
 });
 
 router.beforeEach((to) => {
-
   const auth = useauthStore();
   // Change browser title
   document.title = `${to.meta.title} | ពិភពទំនិញ`;
@@ -157,10 +150,9 @@ router.beforeEach((to) => {
   if (to.meta.requiresAuth && !auth.token) {
     return "/login";
   }
-  if(auth.token && to.path == '/login'){
-    return '/'
+  if (auth.token && to.path == "/login") {
+    return "/";
   }
-
 
   return true;
 });
