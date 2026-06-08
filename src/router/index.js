@@ -13,7 +13,7 @@ import AddtoCart from "@/components/AddtoCart.vue";
 import ForgotPassword from "@/views/forgotPass/forgotpassword.vue";
 import ResetPassword from "@/views/forgotPass/resetpassword.vue";
 import VerityOtp from "@/views/forgotPass/verityOtp.vue";
-
+import Shop from "@/views/shop/shopPage.vue";
 import { useauthStore } from "@/stores/auth.js";
 
 const router = createRouter({
@@ -28,15 +28,6 @@ const router = createRouter({
         title: "Home",
       },
     },
-
-    // {
-    //   path: "/about",
-    //   name: "about",
-    //   component: () => import("../views/AboutView.vue"),
-    //   meta: {
-    //     title: "About",
-    //   },
-    // },
 
     {
       path: "/contactUS",
@@ -123,6 +114,14 @@ const router = createRouter({
       },
     },
     {
+      path: "/shop-page",
+      name: "shop",
+      component: Shop,
+      meta: {
+        title: "shop",
+      },
+    },
+    {
       path: "/detailpage/:id",
       name: "detailpage",
       component: DetailPage,
@@ -143,7 +142,6 @@ const router = createRouter({
 });
 
 router.beforeEach((to) => {
-
   const auth = useauthStore();
   // Change browser title
   document.title = `${to.meta.title} | ពិភពទំនិញ`;
@@ -152,10 +150,9 @@ router.beforeEach((to) => {
   if (to.meta.requiresAuth && !auth.token) {
     return "/login";
   }
-  if(auth.token && to.path == '/login'){
-    return '/'
+  if (auth.token && to.path == "/login") {
+    return "/";
   }
-
 
   return true;
 });
