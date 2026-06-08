@@ -444,7 +444,13 @@ onMounted(() => {
 
     <div class="d-flex justify-content-between align-items-center mb-4">
       <h4>ផលិតផលរបស់ខ្ញុំ</h4>
-
+      <select v-model="selectedCategory" class="form-select" style="width: auto; min-width: 180px" @change="filterByCategory">
+  <!-- This is the default "All Categories" option -->
+  <option value="">— គ្រប់ប្រភេទ —</option>
+  <option v-for="cat in categories" :key="cat.id" :value="cat.id">
+    {{ cat.name }}
+  </option>
+</select>
       <button @click="openAddModal" class="btn btn-primary">
         បន្ថែមផលិតផល
       </button>
