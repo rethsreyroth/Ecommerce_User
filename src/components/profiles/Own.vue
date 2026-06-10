@@ -3,6 +3,45 @@ import { ref, reactive, onMounted, computed } from "vue";
 import api from "@/API/api";
 
 // =====================================
+// TOAST
+// =====================================
+
+const toasts = ref([]);
+
+const showToast = (message, type = "success") => {
+  const id = Date.now();
+  toasts.value.push({ id, message, type });
+  setTimeout(() => {
+    toasts.value = toasts.value.filter((t) => t.id !== id);
+  }, 3500);
+};
+
+const removeToast = (id) => {
+  toasts.value = toasts.value.filter((t) => t.id !== id);
+};
+
+// =====================================
+// CONFIRM MODAL
+// =====================================
+
+const confirmModal = reactive({
+  show: false,
+  title: "",
+  message: "",
+  productId: null,
+});
+
+const openConfirmModal = (id) => {
+  confirmModal.productId = id;
+  confirmModal.show = true;
+};
+
+const closeConfirmModal = () => {
+  confirmModal.show = false;
+  confirmModal.productId = null;
+};
+
+// =====================================
 // STATES
 // =====================================
 
@@ -18,10 +57,11 @@ const isEdit = ref(false);
 const currentProductId = ref(null);
 
 const saving = ref(false);
+const deleting = ref(false);
 
 const imagePreview = ref("");
 
-const fileInputRef = ref(null); // ✅ ADD: file input ref
+const fileInputRef = ref(null);
 
 // =====================================
 // FORM
@@ -81,7 +121,7 @@ const getProducts = async () => {
   } catch (error) {
     console.log(error);
 
-    alert(error.response?.data?.message || "Get Products Failed");
+    showToast(error.response?.data?.message || "Get Products Failed", "error");
   } finally {
     loading.value = false;
   }
@@ -103,7 +143,7 @@ const getCategories = async () => {
   } catch (error) {
     console.log(error);
 
-    alert(error.response?.data?.message || "Get Categories Failed");
+    showToast(error.response?.data?.message || "Get Categories Failed", "error");
   } finally {
     categoryLoading.value = false;
   }
@@ -116,7 +156,6 @@ const getCategories = async () => {
 const validateForm = () => {
   let isValid = true;
 
-  // reset errors
   errors.title = "";
   errors.price = "";
   errors.condition = "";
@@ -144,7 +183,6 @@ const validateForm = () => {
     isValid = false;
   }
 
-  // ✅ FIX: handle category_ids[0] being 0 (valid id)
   if (
     form.category_ids[0] === "" ||
     form.category_ids[0] === null ||
@@ -192,7 +230,6 @@ const resetForm = () => {
 
   imagePreview.value = "";
 
-  // ✅ FIX: reset file input element
   if (fileInputRef.value) {
     fileInputRef.value.value = "";
   }
@@ -237,14 +274,12 @@ const openEditModal = (product) => {
   form.detail = product.detail || "";
   form.story = product.story || "";
 
-  // ✅ FIX: Convert to Number so it matches <option :value="Number(category.id)">
   if (product.categories?.length > 0) {
     form.category_ids = [Number(product.categories[0].id)];
   } else {
     form.category_ids = [""];
   }
 
-  // image preview (existing URL)
   imagePreview.value = product.image || "";
 
   showModal.value = true;
@@ -262,53 +297,37 @@ const saveProduct = async () => {
   try {
     saving.value = true;
 
-    const formData = new FormData();
-
-    formData.append("title", form.title);
-    formData.append("price", form.price);
-    formData.append("condition", form.condition);
-    formData.append("description", form.description);
-    formData.append("detail", form.detail || "");
-    formData.append("story", form.story || "");
-
-    // category_ids
-    formData.append(
-      "category_ids",
-      JSON.stringify([Number(form.category_ids[0])]),
-    );
-
-    // image
-    if (form.image) {
-      formData.append("image", form.image);
-    }
-
-    // debug
-    console.log([...formData.entries()]);
-
     let response;
 
-    // =====================================
     // ADD PRODUCT
-    // =====================================
-
     if (!isEdit.value) {
-      response = await api.post("/api/products", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-      // response = await api.post(`/api/products/${currentProductId.value}`, updateData);
+      const formData = new FormData();
 
-      alert(response.data.message || "បន្ថែមផលិតផលបានជោគជ័យ");
+      formData.append("title", form.title);
+      formData.append("price", form.price);
+      formData.append("condition", form.condition);
+      formData.append("description", form.description);
+      formData.append("detail", form.detail || "");
+      formData.append("story", form.story || "");
+      formData.append(
+        "category_ids",
+        JSON.stringify([Number(form.category_ids[0])]),
+      );
+
+      if (form.image) {
+        formData.append("image", form.image);
+      }
+
+      response = await api.post("/api/products", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+
+      showToast(response.data.message || "បន្ថែមផលិតផលបានជោគជ័យ", "success");
     }
 
-    // =====================================
     // UPDATE PRODUCT
-    // =====================================
     else {
       const updateData = new FormData();
-
-      updateData.append("_method", "PUT");
 
       updateData.append("title", form.title);
       updateData.append("price", form.price);
@@ -316,61 +335,43 @@ const saveProduct = async () => {
       updateData.append("description", form.description);
       updateData.append("detail", form.detail || "");
       updateData.append("story", form.story || "");
-
-      // ✅ FIX: Ensure category_ids is a Number array
       updateData.append(
         "category_ids",
         JSON.stringify([Number(form.category_ids[0])]),
       );
 
-      // ✅ FIX: Only append image if user selected a NEW file
-      // If form.image is a File object (not the original URL string),
-      // it means the user selected a new image
       if (form.image instanceof File) {
         updateData.append("image", form.image);
       }
-
-      console.log("UPDATE DATA:", [...updateData.entries()]);
 
       response = await api.post(
         `/api/products/${currentProductId.value}`,
         updateData,
         {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
+          headers: { "Content-Type": "multipart/form-data" },
         },
       );
 
-      alert(response.data.message || "Update Product Success");
+      showToast(response.data.message || "Update Product Success", "success");
     }
 
-    // close modal
     showModal.value = false;
-
-    // refresh
     getProducts();
   } catch (error) {
     console.log("SAVE ERROR:", error);
 
-    console.log("ERROR RESPONSE:", error.response?.data);
-
-    // backend validation
     if (error.response?.data?.data) {
       const backendErrors = error.response.data.data;
 
       if (backendErrors.title) errors.title = backendErrors.title[0];
       if (backendErrors.price) errors.price = backendErrors.price[0];
-      if (backendErrors.condition)
-        errors.condition = backendErrors.condition[0];
-      if (backendErrors.description)
-        errors.description = backendErrors.description[0];
-      if (backendErrors.category_ids)
-        errors.category_ids = backendErrors.category_ids[0];
+      if (backendErrors.condition) errors.condition = backendErrors.condition[0];
+      if (backendErrors.description) errors.description = backendErrors.description[0];
+      if (backendErrors.category_ids) errors.category_ids = backendErrors.category_ids[0];
       if (backendErrors.image) errors.image = backendErrors.image[0];
     }
 
-    alert(error.response?.data?.message || "Save Product Failed");
+    showToast(error.response?.data?.message || "Save Product Failed", "error");
   } finally {
     saving.value = false;
   }
@@ -380,25 +381,25 @@ const saveProduct = async () => {
 // DELETE PRODUCT
 // =====================================
 
-const deleteProduct = async (id) => {
-  const confirmDelete = confirm(
-    "Are you sure you want to delete this product?",
-  );
-
-  if (!confirmDelete) {
-    return;
-  }
+const deleteProduct = async () => {
+  const id = confirmModal.productId;
 
   try {
+    deleting.value = true;
+
     const response = await api.delete(`/api/products/${id}`);
 
-    alert(response.data.message || "Delete Successfully");
+    showToast(response.data.message || "លុបបានជោគជ័យ", "success");
 
     products.value = products.value.filter((item) => item.id !== id);
+
+    closeConfirmModal();
   } catch (error) {
     console.log(error);
 
-    alert(error.response?.data?.message || "Delete Failed");
+    showToast(error.response?.data?.message || "Delete Failed", "error");
+  } finally {
+    deleting.value = false;
   }
 };
 
@@ -526,7 +527,7 @@ onMounted(() => {
                   Edit
                 </button>
                 <button
-                  @click="deleteProduct(product.id)"
+                  @click="openConfirmModal(product.id)"
                   class="btn btn-danger btn-sm"
                 >
                   Delete
@@ -564,12 +565,12 @@ onMounted(() => {
     </div>
   </div>
 
-  <!-- MODAL -->
+  <!-- ADD / EDIT MODAL -->
   <div v-if="showModal" class="modal-overlay">
-    <div class="modal-box h-75">
+    <div class="modal-box mt-5" style="height: 85%;width: 90%;max-width: 650px;">
       <!-- HEADER -->
       <div class="d-flex justify-content-between align-items-center mb-4">
-        <h4 class="fw-bold">
+        <h4 class="fw-bold mb-0">
           {{ isEdit ? "Edit Product" : "Add Product" }}
         </h4>
         <button @click="showModal = false" class="btn-close"></button>
@@ -599,7 +600,7 @@ onMounted(() => {
         <small class="text-danger">{{ errors.price }}</small>
       </div>
 
-      <!-- ✅ FIX: CATEGORY — use :value="Number(category.id)" for type consistency -->
+      <!-- CATEGORY -->
       <div class="mb-3">
         <label class="form-label">Category</label>
         <select v-model="form.category_ids[0]" class="form-select">
@@ -661,7 +662,7 @@ onMounted(() => {
         ></textarea>
       </div>
 
-      <!-- ✅ FIX: IMAGE — add ref="fileInputRef" so we can reset it -->
+      <!-- IMAGE -->
       <div class="mb-3">
         <label class="form-label">Product Image</label>
         <input
@@ -682,15 +683,78 @@ onMounted(() => {
       <!-- BUTTONS -->
       <div class="d-flex gap-2">
         <button @click="saveProduct" class="btn btn-success" :disabled="saving">
-          {{
-            saving ? "Loading..." : isEdit ? "Update Product" : "Save Product"
-          }}
+          {{ saving ? "Loading..." : isEdit ? "Update Product" : "Save Product" }}
         </button>
         <button @click="showModal = false" class="btn btn-secondary">
           Cancel
         </button>
       </div>
     </div>
+  </div>
+
+  <!-- DELETE CONFIRM MODAL -->
+  <div v-if="confirmModal.show" class="modal-overlay">
+    <div class="confirm-box">
+      <!-- Icon -->
+      <div class="confirm-icon-wrap">
+        <div class="confirm-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="3 6 5 6 21 6"></polyline>
+            <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path>
+            <path d="M10 11v6"></path>
+            <path d="M14 11v6"></path>
+            <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"></path>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Text -->
+      <h5 class="confirm-title">លុបផលិតផល?</h5>
+      <p class="confirm-message">
+        តើអ្នកប្រាកដជាចង់លុបផលិតផលនេះមែនទេ?<br/>
+        សកម្មភាពនេះមិនអាចត្រឡប់វិញបានទេ។
+      </p>
+
+      <!-- Buttons -->
+      <div class="confirm-actions">
+        <button
+          @click="closeConfirmModal"
+          class="btn btn-secondary confirm-btn"
+          :disabled="deleting"
+        >
+          បោះបង់
+        </button>
+        <button
+          @click="deleteProduct"
+          class="btn btn-danger confirm-btn"
+          :disabled="deleting"
+        >
+          <span v-if="deleting">
+            <span class="spinner-border spinner-border-sm me-1"></span>
+            កំពុងលុប...
+          </span>
+          <span v-else>លុប</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div class="toast-container">
+    <transition-group name="toast">
+      <div
+        v-for="toast in toasts"
+        :key="toast.id"
+        class="toast-item"
+        :class="toast.type === 'error' ? 'toast-error' : 'toast-success'"
+      >
+        <span class="toast-icon">
+          {{ toast.type === "error" ? "✕" : "✓" }}
+        </span>
+        <span class="toast-message">{{ toast.message }}</span>
+        <button class="toast-close" @click="removeToast(toast.id)">✕</button>
+      </div>
+    </transition-group>
   </div>
 </template>
 
@@ -726,6 +790,62 @@ onMounted(() => {
   overflow-y: auto;
   border-radius: 20px;
   padding: 25px;
+}
+
+/* DELETE CONFIRM MODAL */
+.confirm-box {
+  background: white;
+  width: 100%;
+  max-width: 420px;
+  border-radius: 20px;
+  padding: 32px 28px 28px;
+  text-align: center;
+  z-index: 1000;
+}
+
+.confirm-icon-wrap {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.confirm-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: #fff1f1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ef4444;
+}
+
+.confirm-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin-bottom: 10px;
+}
+
+.confirm-message {
+  font-size: 14px;
+  color: #6b7280;
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+
+.confirm-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.confirm-btn {
+  flex: 1;
+  padding: 10px 0;
+  border-radius: 10px;
+  font-weight: 500;
+  font-size: 15px;
 }
 
 .preview-img {
@@ -765,35 +885,78 @@ onMounted(() => {
   }
 }
 
-.skeleton-id {
-  width: 40px;
-  height: 20px;
+.skeleton-id { width: 40px; height: 20px; }
+.skeleton-image { width: 70px; height: 70px; border-radius: 12px; }
+.skeleton-text { width: 160px; height: 20px; }
+.skeleton-badge { width: 80px; height: 25px; border-radius: 30px; }
+.skeleton-price { width: 70px; height: 20px; }
+.skeleton-date { width: 120px; height: 20px; }
+.skeleton-action { width: 70px; height: 35px; border-radius: 10px; }
+
+/* TOAST */
+.toast-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
-.skeleton-image {
-  width: 70px;
-  height: 70px;
+
+.toast-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 280px;
+  max-width: 380px;
+  padding: 14px 16px;
   border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+  font-size: 14px;
+  font-weight: 500;
+  color: #fff;
 }
-.skeleton-text {
-  width: 160px;
-  height: 20px;
+
+.toast-success { background: #22c55e; }
+.toast-error { background: #ef4444; }
+
+.toast-icon {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
 }
-.skeleton-badge {
-  width: 80px;
-  height: 25px;
-  border-radius: 30px;
+
+.toast-message {
+  flex: 1;
+  line-height: 1.4;
 }
-.skeleton-price {
-  width: 70px;
-  height: 20px;
+
+.toast-close {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+  font-size: 13px;
+  padding: 0;
+  flex-shrink: 0;
+  line-height: 1;
 }
-.skeleton-date {
-  width: 120px;
-  height: 20px;
-}
-.skeleton-action {
-  width: 70px;
-  height: 35px;
-  border-radius: 10px;
+
+.toast-close:hover { color: #fff; }
+
+.toast-enter-active { animation: toast-in 0.3s ease; }
+.toast-leave-active { animation: toast-in 0.25s ease reverse; }
+
+@keyframes toast-in {
+  from { opacity: 0; transform: translateX(40px); }
+  to   { opacity: 1; transform: translateX(0); }
 }
 </style>
