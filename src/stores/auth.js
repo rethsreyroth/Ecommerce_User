@@ -58,7 +58,7 @@ export const useauthStore = defineStore('auth', () => {
   
 
   return {login, Logout, register, token, success};
-  })
+  });
   
 //   const Logout = async (data) => {
 //     try {

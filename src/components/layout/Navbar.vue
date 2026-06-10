@@ -1,151 +1,3 @@
-<style scoped>
-.modal-overlay,
-.modal-container,
-.modal-header,
-.modal-body,
-.modal-footer,
-.btn-cancel,
-.btn-confirm {
-    font-family: "Kantumruy Pro", sans-serif;
-}
-
-.modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-    animation: fadeIn 0.3s ease;
-}
-
-.modal-container {
-    background-color: white;
-    border-radius: 12px;
-    width: 90%;
-    max-width: 400px;
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-    animation: slideUp 0.3s ease;
-}
-
-.modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px 24px;
-    border-bottom: 1px solid #e5e7eb;
-}
-
-.modal-header h3 {
-    margin: 0;
-    font-size: 18px;
-    font-weight: 600;
-    color: #111827;
-}
-
-.close-btn {
-    background: none;
-    border: none;
-    font-size: 24px;
-    cursor: pointer;
-    color: #6b7280;
-    transition: color 0.2s;
-    padding: 0;
-    width: 24px;
-    height: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.close-btn:hover {
-    color: #111827;
-}
-
-.modal-body {
-    padding: 24px;
-}
-
-.modal-body p {
-    margin: 0;
-    font-size: 16px;
-    color: #374151;
-}
-
-.modal-footer {
-    display: flex;
-    justify-content: flex-end;
-    gap: 12px;
-    padding: 20px 24px;
-    border-top: 1px solid #e5e7eb;
-}
-
-.btn-cancel,
-.btn-confirm {
-    padding: 8px 16px;
-    border-radius: 6px;
-    font-size: 14px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s;
-    border: none;
-}
-
-.btn-cancel {
-    background-color: #f3f4f6;
-    color: #374151;
-}
-
-.btn-cancel:hover {
-    background-color: #e5e7eb;
-}
-
-.btn-confirm {
-    background-color: #ef4444;
-    color: white;
-}
-
-.btn-confirm:hover {
-    background-color: #dc2626;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
-}
-
-@keyframes slideUp {
-    from {
-        transform: translateY(20px);
-        opacity: 0;
-    }
-    to {
-        transform: translateY(0);
-        opacity: 1;
-    }
-}
-
-/* Optional: Add a subtle scale effect when clicking the logout icon */
-a {
-    display: inline-block;
-    transition: transform 0.2s;
-}
-
-/* a:hover { */
-    /* transform: scale(1.1); */
-/* } */
-</style>
-
 <template>
     <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top py-3">
         <div class="container d-flex justify-content-between">
@@ -198,7 +50,7 @@ a {
                         <i class="bi bi-search"></i>
                     </router-link>
 
-                    <a v-if="auth.token" @click.prevent="`isSearchOpen = true`" 
+                    <a v-if="token" @click.prevent="`isSearchOpen = true`" 
                         class="nav-link d-flex align-items-start text-decoration-none">
                         <img :src="imagePreview" class="profile-img"/>
                         <ul class="dropdown">
@@ -262,7 +114,7 @@ a {
             <i class="bi bi-search"></i>
         </router-link>
 
-        <div v-if="token" @click.prevent="`isSearchOpen = true`" 
+        <div v-if="token" @click.prevent="`isSearchOpen = true`"
             class="nav-item">
             <img :src="imagePreview" class="profile-img mb-1"/>
             <ul class="nav-dropdown text-start">
@@ -363,17 +215,165 @@ a {
     const confirmLogout = () => {
         auth.Logout();
         showLogoutModal.value = false;
-        router.push('/login');
+        // router.push('/login');
+        const token = ref('')
+        token.value = auth.token
+        // console.log("token:"+ token.value);
     }
 
     const cancelLogout = () => {
         showLogoutModal.value = false;
     }
 
-    const token = ref(auth.token)
+    
 </script>
 
 <style>
+    .modal-overlay,
+    .modal-container,
+    .modal-header,
+    .modal-body,
+    .modal-footer,
+    .btn-cancel,
+    .btn-confirm {
+        font-family: "Kantumruy Pro", sans-serif;
+    }
+
+    .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+        animation: fadeIn 0.3s ease;
+    }
+
+    .modal-container {
+        background-color: white;
+        border-radius: 12px;
+        width: 90%;
+        max-width: 400px;
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        animation: slideUp 0.3s ease;
+    }
+
+    .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px 24px;
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    .modal-header h3 {
+        margin: 0;
+        font-size: 18px;
+        font-weight: 600;
+        color: #111827;
+    }
+
+    .close-btn {
+        background: none;
+        border: none;
+        font-size: 24px;
+        cursor: pointer;
+        color: #6b7280;
+        transition: color 0.2s;
+        padding: 0;
+        width: 24px;
+        height: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .close-btn:hover {
+        color: #111827;
+    }
+
+    .modal-body {
+        padding: 24px;
+    }
+
+    .modal-body p {
+        margin: 0;
+        font-size: 16px;
+        color: #374151;
+    }
+
+    .modal-footer {
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+        padding: 20px 24px;
+        border-top: 1px solid #e5e7eb;
+    }
+
+    .btn-cancel,
+    .btn-confirm {
+        padding: 8px 16px;
+        border-radius: 6px;
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s;
+        border: none;
+    }
+
+    .btn-cancel {
+        background-color: #f3f4f6;
+        color: #374151;
+    }
+
+    .btn-cancel:hover {
+        background-color: #e5e7eb;
+    }
+
+    .btn-confirm {
+        background-color: #ef4444;
+        color: white;
+    }
+
+    .btn-confirm:hover {
+        background-color: #dc2626;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
+
+    @keyframes slideUp {
+        from {
+            transform: translateY(20px);
+            opacity: 0;
+        }
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+    /* Optional: Add a subtle scale effect when clicking the logout icon */
+    a {
+        display: inline-block;
+        transition: transform 0.2s;
+    }
+
+    /* a:hover { */
+        /* transform: scale(1.1); */
+    /* } */
     .profile-img {
         width: 25px;
         height: 25px;
