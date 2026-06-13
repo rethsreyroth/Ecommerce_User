@@ -33,7 +33,6 @@ export const useauthStore = defineStore('auth', () => {
       console.error(err);
     }
   }
-
   // register
   const register = async (data) =>{
     console.log(data);
