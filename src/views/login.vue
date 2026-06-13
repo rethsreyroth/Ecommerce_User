@@ -1,7 +1,4 @@
-<!-- Form login -->
-
 <template>
-<!-- <<<<<<< HEAD -->
     <div class="container min-vh-100 d-flex justify-content-center align-items-center">
         <div class="card shadow-lg border-0 rounded-5 p-4 w-100" style="max-width: 520px;">
             <div class="text-center mb-4">
@@ -186,20 +183,13 @@
         
     }
     const loginForm = async() => {   
-        // console.log(email.value);
-        // console.log(password.value);
-        if(!validationForm()) return
-            await auth.login(form);
-            router.push('/');
-        }
-
+        if(!validationForm()) return}
             loading.value = true;
               try {
                 const success = await auth.login({
                   email: form.email,
                   password: form.password
                 });
-
                 if (success) {
                   showToast('ចូលគណនីបានដោយជោគជ័យ', 'success');
                   setTimeout(() => {
