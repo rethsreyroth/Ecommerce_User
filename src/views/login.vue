@@ -14,7 +14,7 @@
               type="email"
               v-model="form.email"
               placeholder="បញ្ចូលអុីមែល"
-              @blur="validateField('email')"
+              
               :disabled="loading"
             />
           </div>
@@ -28,7 +28,7 @@
               :type="passwordVisible ? 'text' : 'password'"
               v-model="form.password"
               placeholder="បញ្ចូលពាក្យសម្ងាត់"
-              @blur="validateField('password')"
+            
               :disabled="loading"
             />
             <button type="button" class="toggle-password" @click="passwordVisible = !passwordVisible" :disabled="loading">
@@ -41,10 +41,10 @@
         </div>
 
         <div class="options-group">
-          <label class="checkbox-label">
+          <!-- <label class="checkbox-label">
             <input type="checkbox" v-model="rememberMe" :disabled="loading" />
             <span>ចងចាំខ្ញុំ</span>
-          </label>
+          </label> -->
           <router-link to="/forgotpassword" class="text-decoration-none">
             ភ្លេចពាក្យសម្ងាត់?
           </router-link>
@@ -66,7 +66,7 @@
             បង្កើតគណនី
             </router-link>
         </div>
-    </form>
+      </form>
       <!-- Toast Notification -->
       <div v-if="toast.message" class="toast" :class="toast.type">
         <i
@@ -78,7 +78,7 @@
         ></i>
         <span>{{ toast.message }}</span>
       </div>
-      </div>
+    </div>
   </div>
 </template>
 

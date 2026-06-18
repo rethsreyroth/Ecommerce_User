@@ -1,19 +1,12 @@
 import { createRouter, createWebHistory } from "vue-router";
 
 import HomeView from "../views/HomeView.vue";
-import register from "@/views/register.vue";
-import login from "@/views/login.vue";
 import { useauthStore } from "@/stores/auth";
-import forgotpassword from '@/views/forgotPass/forgotpassword.vue'
-import resetpassword from '@/views/forgotPass/resetpassword.vue'
-// import Shop from "@/views/Shop.vue";
 import shopPage from "@/views/shop/shopPage.vue";
-import verityOtp from '@/views/forgotPass/verityOtp.vue'
 import Register from "@/views/register.vue";
 import Login from "@/views/login.vue";
 import DetailPage from "../components/DetailPage.vue";
-// import Checkout from "@/views/Checkout.vue";
-// import Success from "@/views/Success.vue";
+import CheckoutView from "@/views/CheckoutView.vue";
 import Profile from "@/views/Profile.vue";
 import ContactUS from "@/views/ContactUS.vue";
 import AddtoCart from "@/components/AddtoCart.vue";
@@ -21,10 +14,10 @@ import ForgotPassword from "@/views/forgotPass/forgotpassword.vue";
 import ResetPassword from "@/views/forgotPass/resetpassword.vue";
 import VerityOtp from "@/views/forgotPass/verityOtp.vue";
 import sellPage from "@/views/sellPage.vue";
+import sellProduct from "@/components/profiles/sellProduct.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
-
   routes: [
     {
       path: "/",
@@ -42,7 +35,14 @@ const router = createRouter({
         title: "Contact Us",
       },
     },
-
+    {
+      path: "/sellProduct",
+      name: "SellProduct",
+      component: sellProduct,
+      meta: {
+        title: "Sell Product",
+      },
+    },
     {
       path: "/register",
       name: "register",
@@ -71,25 +71,15 @@ const router = createRouter({
         requiresAuth: true,
       },
     },
-    // {
-    //   path: "/checkout",
-    //   name: "checkout",
-    //   component: Checkout,
-    //   meta: {
-    //     title: "Checkout",
-    //     requiresAuth: true,
-    //   },
-    // },
-
-    // {
-    //   path: "/success",
-    //   name: "success",
-    //   component: Success,
-    //   meta: {
-    //     title: "Success",
-    //     requiresAuth: true,
-    //   },
-    // },
+    {
+      path: "/checkout",
+      name: "checkout",
+      component: CheckoutView,
+      meta: {
+        title: "Checkout",
+        requiresAuth: true,
+      },
+    },
 
     {
       path: "/forgotpassword",
@@ -153,7 +143,6 @@ const router = createRouter({
     },
   ],
 });
-
 router.beforeEach((to) => {
   const auth = useauthStore();
   // Change browser title
