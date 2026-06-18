@@ -2,6 +2,7 @@
 import { ref, reactive, onMounted, computed } from "vue";
 import api from "@/API/api";
 import router from "@/router";
+import SellProduct from "./sellProduct.vue";
 
 // =====================================
 // TOAST
@@ -39,10 +40,6 @@ const closeConfirmModal = () => {
   confirmModal.show = false;
   confirmModal.productId = null;
 };
-
-// =====================================
-// STATES
-// =====================================
 
 const products = ref([]);
 const categories = ref([]);
@@ -88,6 +85,8 @@ const errors = reactive({
   image: "",
 });
 
+const currentView = ref('products');
+
 // =====================================
 // FORMAT DATE
 // =====================================
@@ -102,18 +101,12 @@ const formatDate = (date) => {
   });
 };
 
-// =====================================
-// GET PRODUCTS
-// =====================================
-
+//  get Products 
 const getProducts = async () => {
   try {
     loading.value = true;
-
     const response = await api.get("/api/profile/products?page=1&per_page=20");
-
     // console.log("PRODUCTS:", response.data);
-
     products.value = response.data.data || [];
   } catch (error) {
     console.log(error);
@@ -154,7 +147,6 @@ const deleteProduct = async () => {
     deleting.value = false;
   }
 };
-
 // =====================================
 // PAGINATION
 // =====================================
@@ -178,7 +170,6 @@ const changePage = (page) => {
 
 onMounted(() => {
   getProducts();
-  // getCategories();
 });
 </script>
 
@@ -186,16 +177,18 @@ onMounted(() => {
   <div class="card card-ui p-4">
     <!-- HEADER -->
     <div class="d-flex justify-content-between align-items-center mb-4">
-      <h4>ផលិតផលរបស់ខ្ញុំ</h4>
+        <div class="nav-tabs">
+            <button class="nav-btn btn btn-outline-primary" :class="{ active: currentView === 'products' }" @click="currentView = 'products'">ផលិតផលរបស់ខ្ញុំ</button>
+            <button class="nav-btn btn btn-outline-primary" :class="{ active: currentView === 'transactions' }" @click="currentView = 'transactions'">ការគ្រប់គ្រងផលិតផល</button>
+        </div>
       <router-link to="/sellPage">
         <button class="btn btn-primary">
         បន្ថែមផលិតផល
       </button>
       </router-link>
     </div>
-
     <!-- LOADING -->
-    <div v-if="loading">
+    <div v-if="loading" >
       <table class="table align-middle">
         <thead>
           <tr>
@@ -226,81 +219,76 @@ onMounted(() => {
         </tbody>
       </table>
     </div>
-
-    <!-- TABLE -->
+ <!-- ផលិតផលរបស់ខ្ញុំ     -->
     <div v-else class="table-responsive">
-      <table class="table table-hover align-middle">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Image</th>
-            <th>Title</th>
-            <th>Category</th>
-            <th>Price</th>
-            <th>Date</th>
-            <th class="text-center">Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-if="products.length === 0">
-            <td colspan="7" class="text-center text-muted py-4">
-              គ្មានផលិតផលទេ
-            </td>
-          </tr>
-          <tr v-for="product in paginatedProducts" :key="product.id">
-            <td>{{ product.id }}</td>
-            <td>
-              <img
-                :src="product.image"
-                class="product-img"
-                :alt="product.title"
-              />
-            </td>
-            <td>{{ product.title }}</td>
-            <td>
-              <span
-                v-for="category in product.categories"
-                :key="category.id"
-                class="badge bg-primary me-1"
-              >
-                {{ category.name }}
-              </span>
-            </td>
-            <td>${{ product.price }}</td>
-            <td>{{ formatDate(product.created_at) }}</td>
-            <td>
-              <div class="d-flex justify-content-center gap-2">
-                <button @click="editProduct(product)" class="btn btn-warning btn-sm">Edit</button>
-                <button @click="openConfirmModal(product.id)" class="btn btn-danger btn-sm">Delete</button>
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <div class="d-flex justify-content-center mt-4 gap-2">
-        <button
-          class="btn btn-outline-primary"
-          :disabled="currentPage === 1"
-          @click="currentPage--"
-        >
-          Prev
-        </button>
-        <button
-          v-for="page in totalPages"
-          :key="page"
-          @click="changePage(page)"
-          class="btn"
-          :class="currentPage === page ? 'btn-primary' : 'btn-outline-primary'"
-        >
-          {{ page }}
-        </button>
-        <button
-          class="btn btn-outline-primary"
-          :disabled="currentPage === totalPages"
-          @click="currentPage++"
-        >
-          Next
-        </button>
+      <div v-if="currentView === 'products'" class="card">
+        <table class="table table-hover align-middle text-center">
+          <thead>
+            <tr>
+              <th>លេខសម្គាល់</th>
+              <th>រូបភាព</th>
+              <th>ឈ្មោះផលិតផល</th>
+              <th>Category</th>
+              <th>តម្លៃ</th>
+              <th>កាលបរិច្ឆេត</th>
+              <th class="text-center">សកម្មភាព</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-if="products.length === 0">
+              <td colspan="7" class="text-center text-muted py-4">
+                គ្មានផលិតផលទេ
+              </td>
+            </tr>
+            <tr v-for="product in paginatedProducts" :key="product.id">
+              <td>{{ product.id }}</td>
+              <td>
+                <img
+                  :src="product.image"
+                  class="product-img"
+                  :alt="product.title"
+                />
+              </td>
+              <td>{{ product.title }}</td>
+              <td>
+                <span
+                  v-for="category in product.categories"
+                  :key="category.id"
+                  class="badge bg-primary me-1"
+                >
+                  {{ category.name }}
+                </span>
+              </td>
+              <td>${{ product.price }}</td>
+              <td>{{ formatDate(product.created_at) }}</td>
+              <td>
+                <div class="d-flex justify-content-center gap-2">
+                  <button @click="editProduct(product)" class="btn btn-warning btn-sm">Edit</button>
+                  <button @click="openConfirmModal(product.id)" class="btn btn-danger btn-sm">Delete</button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="d-flex justify-content-center mt-4 gap-2">
+          <button
+            class="btn btn-outline-primary"
+            :disabled="currentPage === 1"
+            @click="currentPage--"
+          >
+            Prev
+          </button>
+          <button v-for="page in totalPages" :key="page" @click="changePage(page)" class="btn" :class="currentPage === page ? 'btn-primary' : 'btn-outline-primary'">
+            {{ page }}
+          </button>
+          <button class="btn btn-outline-primary" :disabled="currentPage === totalPages" @click="currentPage++">
+            Next
+          </button>
+        </div>
+      </div>
+      <!-- ការគ្រប់គ្រងផលិតផល -->
+      <div v-else class="card">
+        <sell-product/>
       </div>
     </div>
   </div>

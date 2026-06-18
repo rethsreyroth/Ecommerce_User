@@ -234,14 +234,7 @@ import Footer from "@/components/layout/Footer.vue";
     <BaseCard></BaseCard>
     <Footer></Footer>
   </template>
-
-
-  <!-- <script setup>
-    import BaseCard from "@/components/ui/BaseCard.vue";
-  </script> -->
-<!-- </template> -->
   <Navbar />
-
   <!-- HERO SECTION -->
   <section class="hero-section" style="position: relative;">
     <div class="container">

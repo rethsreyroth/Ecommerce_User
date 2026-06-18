@@ -10,7 +10,7 @@ export const useauthStore = defineStore('auth', () => {
   let success = ref(null)
   // login
   const login = async (data) =>{
-    console.log(data);
+    // console.log(data);
     try{
       const res =await api.post('/api/login', data);
       success.value = res.status;
@@ -20,8 +20,6 @@ export const useauthStore = defineStore('auth', () => {
         token.value = res.data.data.token;
         localStorage.setItem('token', token.value)
         // alert('Login Success')
-        router.push('/');
-        // router.push('/');
         return true
       }
       else{

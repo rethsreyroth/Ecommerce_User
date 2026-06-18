@@ -1,3 +1,129 @@
+<template>
+  <Navbar/>
+  <div class="sell-page-container">
+    <div class="card sell-card mb-5">
+      <div class="card-header bg-white border-0 pt-4">
+        <h4 class="fw-bold">{{ isEdit ? 'Edit Product' : 'Sell a Product' }}</h4>
+        <p class="text-muted mb-0">Fill out the details below to list your item.</p>
+      </div>
+
+      <div class="card-body">
+        <div class="row">
+          
+          <!-- LEFT SIDE: IMAGE UPLOAD -->
+          <div class="col-lg-5 border-end pe-lg-5">
+            <label class="form-label fw-semibold">Product Image</label>
+            <!-- Image Preview / Drop Zone -->
+            <div class="image-upload-zone" :class="{ 'has-image': imagePreview }">
+              <img v-if="imagePreview" :src="imagePreview" class="preview-img" alt="Preview" />
+              <div v-else class="upload-placeholder">
+                <i class="bi bi-cloud-arrow-up"></i>
+                <span>Click or drag to upload</span>
+              </div>
+              <input type="file" class="file-input" accept="image/*" @change="handleImage" />
+            </div>
+            <small class="text-danger mt-2 d-block">{{ errors.image }}</small>
+          </div>
+
+          <!-- RIGHT SIDE: FORM FIELDS -->
+          <div class="col-lg-7 ps-lg-5 mt-4 mt-lg-0">
+            
+            <!-- Title -->
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Title</label>
+              <input v-model="form.title" type="text" class="form-control" placeholder="e.g. Gaming PC, iPhone 14" />
+              <small class="text-danger">{{ errors.title }}</small>
+            </div>
+
+            <!-- Price & Condition Row -->
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">Price ($)</label>
+                <input v-model="form.price" type="number" class="form-control" placeholder="0.00" />
+                <small class="text-danger">{{ errors.price }}</small>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">Condition</label>
+                <select v-model="form.condition" class="form-select">
+                  <option disabled value="">Select condition</option>
+                  <option value="New">New</option>
+                  <option value="Used">Used</option>
+                  <option value="Refurbished">Refurbished</option>
+                </select>
+                <small class="text-danger">{{ errors.condition }}</small>
+              </div>
+            </div>
+
+            <!-- Category -->
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Category</label>
+              <select v-model="form.category_ids[0]" class="form-select">
+                <option disabled value="">Select a category</option>
+                <option v-for="cat in categories" :key="cat.id" :value="cat.id">
+                  {{ cat.name }}
+                </option>
+              </select>
+              <small class="text-danger">{{ errors.category_ids}}</small>
+            </div>
+
+            <!-- Description -->
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Description</label>
+              <textarea v-model="form.description" rows="3" class="form-control" placeholder="Brief overview of the product"></textarea>
+              <small class="text-danger">{{ errors.description }}</small>
+            </div>
+
+            <!-- Detail -->
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Detail</label>
+              <textarea v-model="form.detail" rows="2" class="form-control" placeholder="Specifications (e.g. RTX 4070, 32GB RAM)"></textarea>
+              <small class="text-danger">{{ errors.detail }}</small>
+
+            </div>
+
+            <!-- Story -->
+            <div class="mb-4">
+              <label class="form-label fw-semibold">Story</label>
+              <textarea v-model="form.story" rows="2" class="form-control" placeholder="Why are you selling it?"></textarea>
+              <small class="text-danger">{{ errors.story }}</small>
+
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="d-flex gap-2">
+              <button @click="saveProduct" class="btn btn-primary btn-lg flex-grow-1" :disabled="saving">
+                <span v-if="saving" class="spinner-border spinner-border-sm me-2"></span>
+                {{ isEdit ? 'Update Product' : 'Post Product' }}
+              </button>
+              <button v-if="isEdit" @click="resetForm" class="btn btn-outline-secondary btn-lg">
+                Cancel
+              </button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- toast  -->
+  <div class="toast-container">
+    <transition-group name="toast">
+      <div
+        v-for="toast in toasts"
+        :key="toast.id"
+        class="toast-item"
+        :class="toast.type === 'error' ? 'toast-error' : 'toast-success'"
+      >
+        <span class="toast-icon">
+          {{ toast.type === "error" ? "✕" : "✓" }}
+        </span>
+        <span class="toast-message">{{ toast.message }}</span>
+        <button class="toast-close" @click="removeToast(toast.id)">✕</button>
+      </div>
+    </transition-group>
+  </div>
+</template>
+
 <script setup>
 import { ref, reactive, onMounted } from "vue";
 import api from "@/API/api";
@@ -223,9 +349,10 @@ const saveProduct = async () => {
           headers: { "Content-Type": "multipart/form-data" },
         },
       );
-      showToast( "Update Product Success", "success");
-      resetForm();
+      showToast( "អាប់ដែតផលិតផលបានជោគជ័យ", "success");
       router.push('/sellPage');
+      resetForm();
+      
     }
   } catch (error) {
     console.log("SAVE ERROR:", error);
@@ -270,132 +397,6 @@ onMounted(() => {
   }
 });
 </script>
-
-<template>
-  <Navbar/>
-  <div class="sell-page-container">
-    <div class="card sell-card mb-5">
-      <div class="card-header bg-white border-0 pt-4">
-        <h4 class="fw-bold">{{ isEdit ? 'Edit Product' : 'Sell a Product' }}</h4>
-        <p class="text-muted mb-0">Fill out the details below to list your item.</p>
-      </div>
-
-      <div class="card-body">
-        <div class="row">
-          
-          <!-- LEFT SIDE: IMAGE UPLOAD -->
-          <div class="col-lg-5 border-end pe-lg-5">
-            <label class="form-label fw-semibold">Product Image</label>
-            <!-- Image Preview / Drop Zone -->
-            <div class="image-upload-zone" :class="{ 'has-image': imagePreview }">
-              <img v-if="imagePreview" :src="imagePreview" class="preview-img" alt="Preview" />
-              <div v-else class="upload-placeholder">
-                <i class="bi bi-cloud-arrow-up"></i>
-                <span>Click or drag to upload</span>
-              </div>
-              <input type="file" class="file-input" accept="image/*" @change="handleImage" />
-            </div>
-            <small class="text-danger mt-2 d-block">{{ errors.image }}</small>
-          </div>
-
-          <!-- RIGHT SIDE: FORM FIELDS -->
-          <div class="col-lg-7 ps-lg-5 mt-4 mt-lg-0">
-            
-            <!-- Title -->
-            <div class="mb-3">
-              <label class="form-label fw-semibold">Title</label>
-              <input v-model="form.title" type="text" class="form-control" placeholder="e.g. Gaming PC, iPhone 14" />
-              <small class="text-danger">{{ errors.title }}</small>
-            </div>
-
-            <!-- Price & Condition Row -->
-            <div class="row mb-3">
-              <div class="col-md-6">
-                <label class="form-label fw-semibold">Price ($)</label>
-                <input v-model="form.price" type="number" class="form-control" placeholder="0.00" />
-                <small class="text-danger">{{ errors.price }}</small>
-              </div>
-              <div class="col-md-6">
-                <label class="form-label fw-semibold">Condition</label>
-                <select v-model="form.condition" class="form-select">
-                  <option disabled value="">Select condition</option>
-                  <option value="New">New</option>
-                  <option value="Used">Used</option>
-                  <option value="Refurbished">Refurbished</option>
-                </select>
-                <small class="text-danger">{{ errors.condition }}</small>
-              </div>
-            </div>
-
-            <!-- Category -->
-            <div class="mb-3">
-              <label class="form-label fw-semibold">Category</label>
-              <select v-model="form.category_ids[0]" class="form-select">
-                <option disabled value="">Select a category</option>
-                <option v-for="cat in categories" :key="cat.id" :value="cat.id">
-                  {{ cat.name }}
-                </option>
-              </select>
-              <small class="text-danger">{{ errors.category_ids}}</small>
-            </div>
-
-            <!-- Description -->
-            <div class="mb-3">
-              <label class="form-label fw-semibold">Description</label>
-              <textarea v-model="form.description" rows="3" class="form-control" placeholder="Brief overview of the product"></textarea>
-              <small class="text-danger">{{ errors.description }}</small>
-            </div>
-
-            <!-- Detail -->
-            <div class="mb-3">
-              <label class="form-label fw-semibold">Detail</label>
-              <textarea v-model="form.detail" rows="2" class="form-control" placeholder="Specifications (e.g. RTX 4070, 32GB RAM)"></textarea>
-              <small class="text-danger">{{ errors.detail }}</small>
-
-            </div>
-
-            <!-- Story -->
-            <div class="mb-4">
-              <label class="form-label fw-semibold">Story</label>
-              <textarea v-model="form.story" rows="2" class="form-control" placeholder="Why are you selling it?"></textarea>
-              <small class="text-danger">{{ errors.story }}</small>
-
-            </div>
-
-            <!-- Action Buttons -->
-            <div class="d-flex gap-2">
-              <button @click="saveProduct" class="btn btn-primary btn-lg flex-grow-1" :disabled="saving">
-                <span v-if="saving" class="spinner-border spinner-border-sm me-2"></span>
-                {{ isEdit ? 'Update Product' : 'Post Product' }}
-              </button>
-              <button v-if="isEdit" @click="resetForm" class="btn btn-outline-secondary btn-lg">
-                Cancel
-              </button>
-            </div>
-
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <!-- toast  -->
-  <div class="toast-container">
-    <transition-group name="toast">
-      <div
-        v-for="toast in toasts"
-        :key="toast.id"
-        class="toast-item"
-        :class="toast.type === 'error' ? 'toast-error' : 'toast-success'"
-      >
-        <span class="toast-icon">
-          {{ toast.type === "error" ? "✕" : "✓" }}
-        </span>
-        <span class="toast-message">{{ toast.message }}</span>
-        <button class="toast-close" @click="removeToast(toast.id)">✕</button>
-      </div>
-    </transition-group>
-  </div>
-</template>
 
 <style scoped>
 .sell-page-container {
