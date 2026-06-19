@@ -13,16 +13,15 @@
                     <div class="exact-img-wrapper">
                         <img :src="product.image" alt="Smart Watch">
                     </div>
-
-                    <div class="card-body-content d-flex justify-content-between">
-                        <div class="exact-info-title">{{product.title}}</div>
-                        <div class="exact-info-brand text-start">{{product.description}}</div>
-                        <div class="exact-price-box">
-                            <span class="exact-price-current">$ {{product.price}}</span>
-                        </div>
-                    </div>
                     
-                    <div class="exact-card-footer">
+                    <div class="exact-card-footer d-block">
+                        <div class="card-body-content">
+                            <div class="exact-info-title">{{product.title}}</div>
+                            <div class="exact-info-brand text-start">{{product.description}}</div>
+                            <div class="exact-price-box">
+                                <span class="exact-price-current">$ {{product.price}}</span>
+                            </div>
+                        </div>
                         <!-- <span class="exact-stock-text">មានក្នុងស្តុក</span> -->
                         <button @click="handleFormSubmit(product)" class="exact-btn-action">បន្ថែមក្នុងកន្រ្តក់</button>
                     </div>
@@ -85,28 +84,3 @@
     };
 </script> 
 
-<style>
-    .product-card-exact .btn-cart{
-        display: inline-block;
-        text-align: center;
-        color: white;
-        font-size: 20px;
-        background-color: #181616;
-        border-radius: 10px;
-        padding: 5px 10px;
-        position: absolute;
-        top: 50px;
-        left: 82%;
-        opacity: 0;
-        transition: 0.8s;
-    }
-    .product-card-exact:hover .btn-cart{
-        opacity: 1;
-        top: 16px;
-    }
-    .product-card-exact .btn-cart:hover{
-        color: black;
-        background-color: white;
-        box-shadow: 0px 0px 5px #2768f4;
-    }
-</style>
