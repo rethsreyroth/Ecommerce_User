@@ -6,20 +6,18 @@
                 ពិភពទំនិញ
             </router-link>
 
-            <ul class="collapse navbar-collapse navbar-nav justify-content-end align-items-center gap-lg-4 mt-3 mt-lg-0">
-                <li>
-                    <div class="nav-item d-flex justify-content-center align-items-center gap-lg-3 my-3 my-lg-0">
-                        <router-link to="/shop-page" class="btn btn-outline-primary rounded-pill px-3 nav-hover" active-class="active-nav">
-                            <i class="bi bi-cart me-1"></i> ទិញ
-                        </router-link>
+            <ul class="navbar-nav flex-row justify-content-end align-items-center gap-lg-4 mt-3 mt-lg-0">
+                <li class="nav-item d-flex justify-content-center align-items-center gap-lg-3 my-3 my-lg-0">
+                    <router-link to="/shop-page" class="btn btn-outline-primary rounded-pill px-3 nav-hover" active-class="active-nav">
+                        <i class="bi bi-cart me-1"></i> ទិញ
+                    </router-link>
 
-                        <router-link to="/sellPage" class="btn btn-outline-primary rounded-pill px-3 nav-hover" active-class="active-nav">
-                            <i class="bi bi-shop me-1"></i> លក់
-                        </router-link>
-                    </div>
+                    <router-link to="/sellPage" class="btn btn-outline-primary rounded-pill px-3 nav-hover" active-class="active-nav">
+                        <i class="bi bi-shop me-1"></i> លក់
+                    </router-link>                   
                 </li>
 
-                <li class="d-flex justify-content-center gap-lg-2 my-3 my-lg-0">
+                <li class="nav-item d-flex justify-content-center gap-lg-2 my-3 my-lg-0">
                     <router-link to="/" class="nav-link">
                         ទំព័រដើម
                     </router-link>
@@ -44,9 +42,9 @@
                         <i class="bi bi-search"></i>
                     </router-link>
 
-                    <a v-if="Token" @click.prevent="`isSearchOpen = true`" 
+                    <a v-if="isLogin" @click.prevent="`isSearchOpen = true`" 
                         class="nav-link d-flex align-items-start text-decoration-none">
-                        <img :src="imagePreview" class="profile-img"/>
+                        <img :src="avatarUrl" class="profile-img"/>
                         <ul class="dropdown">
                             <li class="dropdown-item mb-2">
                                 <router-link to="/profile" class="dropdown-link text-decoration-none">មើលប្រវត្តិរូប</router-link>
@@ -58,7 +56,7 @@
                         </ul>
                     </a>
 
-                    <button v-else @click="gotoLogin()"  class="btn btn-outline-primary rounded-pill px-4">
+                    <button v-else @click="gotoLogin"  class="btn btn-outline-primary rounded-pill px-4">
                         Login
                     </button>
                 </li>
@@ -102,18 +100,12 @@
 
 <script setup>
     import { storeToRefs } from 'pinia'; 
-    import { RouterLink, useRouter } from 'vue-router'
+    import { RouterLink, useRouter} from 'vue-router'
     import { useProductStore } from '@/stores/products';
     import { useProfileStore } from '@/stores/profile'; // ធានាថា import ត្រឹមត្រូវ
     import { useauthStore } from '@/stores/auth';
     import { onMounted, ref, watch } from 'vue';
 
-    const router = useRouter();   
-    function gotoLogin(){
-        // alert("login")
-        router.push('/login');
-        
-    };
 
     // 🛠️ សម្អាត៖ ទុកការ Import តែម្តងគត់នៅខាងលើ និងលុបការប្រកាសបាតកូដចោល
     import { useCart } from '@/stores/addToCart';
@@ -135,7 +127,7 @@
     const cartStore = useCart();
     const { totalCartItems } = storeToRefs(cartStore);
     let isLogin = ref(null||localStorage.getItem('token'))
-    
+    // console.log(isLogin.value)
     /////Show and Hide btn search
     function showHide(){
         // isShow.value = false;//dosen't use ref again bc it already use
@@ -149,9 +141,9 @@
     ///////Search Product
     let productStore = useProductStore();
     let search = ref('');
-    console.log(search.value);
+    // console.log(search.value);
     watch(search, async(value) => {
-        // console.log(search.value);
+        productStore.searchQuery = value;
         await productStore.fetchProduct({search : value});
     })
 
@@ -161,27 +153,29 @@
 
     ///////////get profile image
     const profileStore = useProfileStore();
-    const { imagePreview } = storeToRefs(profileStore);
-    onMounted(() => {
-        profileStore.getProfile();
-    });
+    const { avatarUrl } = storeToRefs(profileStore);
 
     /////////////log out///////////////
     const showLogoutModal = ref(false);
     const handleLogout = () => {
         showLogoutModal.value = true;
     }
-
     const confirmLogout = async() => {
-        console.log(1);
-        
+        // console.log(1);
         await auth.Logout();
         showLogoutModal.value = false;
-        isLogin.value = localStorage.getItem('token');  
+        isLogin.value = localStorage.getItem('token'); 
+        // window.location.reload(); 
     }
     const cancelLogout = () => {
         showLogoutModal.value = false;
     }
+    const router = useRouter();
+    const gotoLogin = ()=>{
+        console.log("login")
+        // router.push("/login");
+        window.location.href = "/login";
+    };
     // console.log("token"+isLogin.value); 
 </script>
 

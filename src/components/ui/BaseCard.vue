@@ -6,8 +6,8 @@
 
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
         
-            <div class="col" v-for="product in products" :key="product.id">
-                <router-link class="product-card-exact text-decoration-none" :to="`/detailpage/${product.id}`">
+            <div class="col" v-for="product in displayedProducts" :key="product.id">
+                <div class="product-card-exact text-decoration-none">
                     <div class="badge-container"><span class="badge-red-exact">{{product.condition}}</span></div>
                     
                     <div class="exact-img-wrapper">
@@ -22,19 +22,24 @@
                         </div>
                     </div>
                     
-                    <div class="exact-card-footer">
+                    <div class="exact-card-footer d-flex justify-content-between">
                         <!-- <span class="exact-stock-text">មានក្នុងស្តុក</span> -->
                         <button @click="handleFormSubmit(product)" class="exact-btn-action">បន្ថែមក្នុងកន្រ្តក់</button>
+                        <router-link :to="`/detailpage/${product.id}`" class="exact-btn-action">ព័ត៌មានលម្អិត</router-link>
                     </div>
-                </router-link>
+                </div>
             </div>
+        </div>
+
+        <div class="text-center mt-4" v-if="visibleCount < products.length">
+            <button @click="loadMore" class="exact-btn-action">មើលបន្ថែម</button>
         </div>
     </main>
     
 </template>
 
 <script setup>
-    import { onMounted, ref, watch } from 'vue';
+    import { onMounted, ref, watch, computed } from 'vue';
     import { storeToRefs } from 'pinia'; // ជួយរក្សាភាព Reactive ពេលទាញយក state មកប្រើ
     import { useProductStore } from '@/stores/products';
     import { useCart } from '@/stores/addToCart';
@@ -48,12 +53,21 @@
     });
     // console.log(products)
 
+    /////កំណត់ចំនួនproduct ដែលត្រូវdisplay
+    const visibleCount = ref(12); // ចំនួនបង្ហាញដំបូង
+    const displayedProducts = computed(() => {
+        return products.value.slice(0, visibleCount.value);
+    });
+
+    const loadMore = () => {
+        visibleCount.value += 12; // បន្ថែម ១២ ទៀតរាល់ពេលចុច
+    };
 
     ////////add to cart គ្រប់គ្រងការ Add to Cart 
     const cartStore = useCart(); 
     const { formData } = storeToRefs(cartStore);
 
-    // កែត្រង់នេះ៖ ទទួលយក Object ផលិតផលផ្ទាល់ពីប៊ូតុងដែលយើងចុច
+    // ទទួលយក Object ផលិតផលផ្ទាល់ពីប៊ូតុងដែលយើងចុច
     const handleFormSubmit = async (product) => {
         if (!product || !product.id) {
             alert("រកមិនឃើញទិន្នន័យផលិតផលនេះទេ!");

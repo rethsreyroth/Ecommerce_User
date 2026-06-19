@@ -5,10 +5,12 @@ import api from "@/API/api";
 export const useProductStore = defineStore('product', () => {
 
     const products = ref([]);
+    const searchQuery = ref('');
     async function fetchProduct(params = {}) { 
+        const query = params.search !== undefined ? params.search : searchQuery.value;
         let url = "/api/products";
         if (params.search) {
-            url += `?search=${encodeURIComponent(params.search)}`;
+            url += `?search=${encodeURIComponent(query)}`;
         }
         let res = await api.get(url);
         products.value = res.data?.data;
@@ -30,6 +32,7 @@ export const useProductStore = defineStore('product', () => {
     return {
         products,
         product,
+        searchQuery,
         fetchProduct,
         fetchCatchID
     };
