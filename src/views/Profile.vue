@@ -92,6 +92,7 @@ const getProfile = async () => {
     imagePreview.value =
       user.avatar ||
       "https://api-loukbontor.g2.ant.com.kh/storage/avatars/no_photo.jpg";
+
   } catch (error) {
     console.log(error);
     showToast(error.response?.data?.message || "Get Profile Failed", "error");
@@ -170,6 +171,8 @@ const updateProfile = async () => {
   }
 };
 
+import { useProfileStore } from "@/stores/profile";
+const profileStore = useProfileStore();
 const updateProfileImage = async () => {
   if (!form.image) {
     showToast("Please select image", "error");
@@ -190,8 +193,9 @@ const updateProfileImage = async () => {
 
     // ប្រើប្រាស់ពេលវេលាដែលច្បាស់លាស់ដើម្បីបំបែក Cache
     const freshTimestamp = new Date().getTime();
-    imagePreview.value = response.data.avatar + "?t=" + freshTimestamp;
+    imagePreview.value = response.data?.data.avatar + "?t=" + freshTimestamp;
     showToast(response.data.message || "Image Updated", "success");
+    profileStore.setAvatar(imagePreview.value); // Update ទៅ store
     getProfile();
   } catch (error) {
     console.log(error);
@@ -199,6 +203,7 @@ const updateProfileImage = async () => {
   } finally {
     loading.value = false;
   }
+  
 };
 
 // ===========================
@@ -245,6 +250,7 @@ const deleteProfileImage = () => {
         imagePreview.value =
           "https://api-loukbontor.g2.ant.com.kh/storage/avatars/no_photo.jpg";
 
+        profileStore.setAvatar(imagePreview.value); // Update ទៅ store
         getProfile();
       } catch (error) {
         console.log(error);
