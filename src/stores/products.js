@@ -14,9 +14,6 @@ export const useProductStore = defineStore('product', () => {
         products.value = res.data?.data;
         // console.log(products.value);
     }
-
-    
-
     let product = ref([])
     async function fetchCatchID(params) {
         if (!params) {

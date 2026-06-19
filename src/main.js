@@ -7,7 +7,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap/dist/js/bootstrap.bundle.min.js'
 import 'bootstrap-icons/font/bootstrap-icons.css'
 import './assets/main.css'
-
+// សាកល្បងប្តូរទៅជា៖
 
 import Navbar from './components/layout/Navbar.vue'
 import Footer from './components/layout/Footer.vue'

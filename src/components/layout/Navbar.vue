@@ -13,7 +13,7 @@
                             <i class="bi bi-cart me-1"></i> ទិញ
                         </router-link>
 
-                        <router-link to="/sell" class="btn btn-outline-primary rounded-pill px-3 nav-hover" active-class="active-nav">
+                        <router-link to="/sellPage" class="btn btn-outline-primary rounded-pill px-3 nav-hover" active-class="active-nav">
                             <i class="bi bi-shop me-1"></i> លក់
                         </router-link>
                     </div>
@@ -130,7 +130,7 @@
     let auth = useauthStore();
     const {token} = storeToRefs(auth)
     let Token = ref(token);
-    console.log(token.value)
+    // console.log(token.value)
     let isSearchOpen = ref(false);
     const cartStore = useCart();
     const { totalCartItems } = storeToRefs(cartStore);
@@ -151,7 +151,7 @@
     let search = ref('');
     console.log(search.value);
     watch(search, async(value) => {
-        console.log(search.value);
+        // console.log(search.value);
         await productStore.fetchProduct({search : value});
     })
 
