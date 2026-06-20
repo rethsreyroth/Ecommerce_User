@@ -1,89 +1,113 @@
 <template>
-    <main class="container-fluid custom-padding-container py-5" style="background-color: #ffffff !important;">
-        <div class="mb-4">
-            <h2 class="section-title text-dark mb-1">ផលិតផល</h2>
+    <main class="container-fluid custom-padding-container py-5 mt-0" style="background-color: #ffffff !important;">
+        <div class="mb-1">
+            <h2 class="section-title text-dark">ផលិតផល</h2>
         </div>
 
+        <div class="mb-2 d-flex justify-content-between">
+            <div class="dropdown">
+                <select class="border-0 p-1 exact-btn-action fs-6" @change="handleCategoryChange">
+                    <option value="">ផលិតផលទាំងអស់</option>
+                    <option v-for="cat in categories" :key="cat.id" :value="cat.id">
+                        {{ cat.name }}
+                    </option>
+                </select>
+            </div>
+
+            <div class="search-input-wrapper">
+                <input type="text" v-model="search" class="form-control form-control-sm" placeholder="🔍 ស្វែងរកផលិតផល...">
+            </div>
+        </div>
+
+        <div v-if="displayedProducts && displayedProducts.length === 0" class="text-center my-5 py-5 text-muted">
+            <i class="bi bi-box-seam fs-1 d-block mb-3"></i>
+            មិនមានផលិតផលណាត្រូវនឹងការស្វែងរករបស់អ្នកឡើយ។
+        </div>
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
-        
-            <div class="col" v-for="product in products" :key="product.id">
-                <router-link class="product-card-exact text-decoration-none" :to="`/detailpage/${product.id}`">
+            <div class="col" v-for="product in displayedProducts" :key="product.id">
+                <div class="product-card-exact text-decoration-none">
                     <div class="badge-container"><span class="badge-red-exact">{{product.condition}}</span></div>
                     
-                    <div class="exact-img-wrapper">
+                    <router-link class="exact-img-wrapper text-decoration-none" :to="`/detailpage/${product.id}`">
                         <img :src="product.image" alt="Smart Watch">
-                    </div>
+                    </router-link>
 
-                    <div class="card-body-content d-flex justify-content-between">
+                    <router-link class="card-body-content d-flex justify-content-between text-decoration-none" :to="`/detailpage/${product.id}`">
                         <div class="exact-info-title">{{product.title}}</div>
                         <div class="exact-info-brand text-start">{{product.description}}</div>
                         <div class="exact-price-box">
                             <span class="exact-price-current">$ {{product.price}}</span>
                         </div>
-                    </div>
+                    </router-link>
                     
-                    <div class="exact-card-footer">
+                    <div class="exact-card-footer d-flex justify-content-between">
                         <!-- <span class="exact-stock-text">មានក្នុងស្តុក</span> -->
                         <button @click="handleFormSubmit(product)" class="exact-btn-action">បន្ថែមក្នុងកន្រ្តក់</button>
                     </div>
-                </router-link>
+                </div>
             </div>
+        </div>
+
+        <div class="text-center mt-4" v-if="visibleCount < filteredProducts.length">
+            <button @click="loadMore" class="exact-btn-action">មើលបន្ថែម</button>
         </div>
     </main>
     
 </template>
 
 <script setup>
-    import { onMounted, ref, watch } from 'vue';
-    import { storeToRefs } from 'pinia'; // ជួយរក្សាភាព Reactive ពេលទាញយក state មកប្រើ
+    import { onMounted, ref, computed } from 'vue';
+    import { storeToRefs } from 'pinia';
     import { useProductStore } from '@/stores/products';
     import { useCart } from '@/stores/addToCart';
-    
+
     const productStore = useProductStore();
-    // ទាញយក products state ពី store មកប្រើដោយប្រើ storeToRefs
-    const { products } = storeToRefs(productStore);
+    const { products, categories } = storeToRefs(productStore);
+
     onMounted(async () => {
-        // ហៅ function ទៅទាញទិន្នន័យពី API នៅពេល component ចាប់ផ្តើមដំណើរការ (mounted)
+        // ទាញយកទិន្នន័យទាំងពីរមកទុកម្តងឱ្យហើយ
         await productStore.fetchProduct();
+        await productStore.fetchCategories();
     });
-    // console.log(products)
 
+    const search = ref('');
+    const selectCategory = ref(null);
 
-    ////////add to cart គ្រប់គ្រងការ Add to Cart 
-    const cartStore = useCart(); 
-    const { formData } = storeToRefs(cartStore);
+    // គ្រប់គ្រងការច្រោះ (Search + Category) ក្នុងពេលតែមួយ
+    const filteredProducts = computed(() => {
+        let result = products.value;
 
-    // កែត្រង់នេះ៖ ទទួលយក Object ផលិតផលផ្ទាល់ពីប៊ូតុងដែលយើងចុច
-    const handleFormSubmit = async (product) => {
-        if (!product || !product.id) {
-            alert("រកមិនឃើញទិន្នន័យផលិតផលនេះទេ!");
-            return;
+        if (search.value) {
+            const query = search.value.toLowerCase();
+            result = result.filter(p => 
+                p.title?.toLowerCase().includes(query) || 
+                p.description?.toLowerCase().includes(query)
+            );
         }
 
-        // ផ្តល់តម្លៃ id ទៅឲ្យ Pinia store 
-        formData.value.product_id = product.id;
-
-        // រៀបចំទិន្នន័យឲ្យមានសុវត្ថិភាពការពារតម្លៃទទេ
-        const safeProduct = {
-            id: product.id,
-            title: product.title || 'មិនមានឈ្មោះ',
-            description: product.description || 'មិនមានការពិពណ៌នា',
-            condition: product.condition || 'ថ្មី',
-            image: product.image || '',
-            price: Number(product.price) || 0 
-        };
-
-        try {
-            // ហៅទៅកាន់ Actions របស់ Cart Store ដើម្បីរក្សាទុក
-            cartStore.pushToLocalCart(safeProduct, 1); // លេខ 1 គឺចំនួន (Quantity) លំនាំដើម
-            await cartStore.addToCart(); 
-            
-            alert("បានថែមផលិតផលទៅក្នុងកន្ត្រកហើយ!");
-        } catch (error) {
-            console.error("មានបញ្ហាពេលថែមចូលកន្ត្រក៖", error);
+        if (selectCategory.value) {
+            result = result.filter(p => 
+                p.categories?.some(cat => cat.id === selectCategory.value)
+            );
         }
+        return result;
+    });
+
+    const visibleCount = ref(12);
+    const displayedProducts = computed(() => {
+        return filteredProducts.value.slice(0, visibleCount.value);
+    });
+
+    const loadMore = () => { visibleCount.value += 12; };
+
+    // មុខងារជ្រើសរើស Category
+    const handleCategoryChange = (event) => {
+        const val = event.target.value;
+        selectCategory.value = val === "" ? null : Number(val);
+        visibleCount.value = 12; // Reset ចំនួនពេលប្តូរ Category
     };
-</script> 
+</script>
+
 
 <style>
     .product-card-exact .btn-cart{

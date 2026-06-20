@@ -46,10 +46,15 @@ export const useauthStore = defineStore('auth', () => {
   }
   // logout
   const Logout = async () =>{
-      const res = await api.delete('/api/logout');
-      // console.log(res);
-      localStorage.removeItem('token');
-      router.push("/")
+      try {
+        console.log(token.value);
+        await api.delete('/api/logout');
+    } catch (error) {
+        console.error("Logout API failed, but clearing local state:", error);
+    } finally {
+        localStorage.removeItem('token');
+        router.push("/");
+    }
   }
   return {login, Logout, register, token, success};
   });

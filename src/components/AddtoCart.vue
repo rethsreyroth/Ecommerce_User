@@ -110,15 +110,15 @@
     const { products } = storeToRefs(productStore);
 
     import Carousel from 'bootstrap/js/dist/carousel'; 
-    // បង្កើត Logic សម្រាប់ហែក Array ធំ ទៅជា Array តូចៗ (ក្នុង ១ Array មាន ៣ ផលិតផល)
+    // បង្កើត Logic សម្រាប់បំបែក Array ធំ ទៅជា Array តូចៗ (ក្នុង ១ Array មាន ៣ ផលិតផល)
     const chunkedProducts = computed(() => {
-    const chunks = [];
-    if (products.value && products.value.length > 0) {
-        for (let i = 0; i < products.value.length; i += 3) {
-        chunks.push(products.value.slice(i, i + 3));
+        const chunks = [];
+        if (products.value && products.value.length > 0) {
+            for (let i = 0; i < products.value.length; i += 3) {
+            chunks.push(products.value.slice(i, i + 3));
+            }
         }
-    }
-    return chunks;
+        return chunks;
     });
     onMounted(async () => {
         await productStore.fetchProduct();

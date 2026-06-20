@@ -352,6 +352,8 @@ a {
     const profileStore = useProfileStore();
     // 1. ចាប់យកឈ្មោះ imagePreview ឱ្យត្រូវនឹងឈ្មោះនៅក្នុង Store ផ្ទាល់តែម្តង
     let { imagePreview } = storeToRefs(profileStore);
+    
+
 
     onMounted(async () => {
         await productStore.fetchProduct();
