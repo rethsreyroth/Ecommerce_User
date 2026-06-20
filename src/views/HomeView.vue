@@ -1,50 +1,4 @@
 <template>  
-  <template>
-    <Navbar></Navbar>
-    <section class="hero-banner-full border-bottom">
-      <div class="container-fluid py-3">
-        <div
-          class="d-flex flex-column flex-lg-row align-items-center justify-content-between"
-        >
-          <div class="col-12 col-lg-6 order-1 hero-text-content">
-            <h1
-              class="fw-bold mb-3"
-              style="font-size: 36px; color: var(--primary-blue)"
-            >
-              សម្រាប់ជីវិតឌីជីថលរបស់អ្នក
-            </h1>
-            <p class="text-muted mb-4" style="font-size: 16px">
-              ស្វែងរក Laptop, Gaming PC
-              និងគ្រឿងអេឡិចត្រូនិចទំនើបៗជាមួយតម្លៃពិសេសបំផុត។
-            </p>
-            <div
-              class="d-flex gap-2 justify-content-center justify-content-lg-start"
-            >
-              <button
-                class="btn btn-primary px-4 py-2"
-                style="background-color: var(--primary-blue); border: none"
-              >
-                ទិញឥឡូវនេះ
-              </button>
-              <button class="btn btn-outline-secondary px-4 py-2">
-                មើលបន្ថែម
-              </button>
-            </div>
-          </div>
-
-          <div class="col-12 col-lg-6 order-2 hero-image-wrapper">
-            <img
-              src="https://thumbs.dreamstime.com/b/bottles-global-soft-drink-brands-poznan-poland-oct-bottles-global-soft-drink-brands-including-products-coca-cola-company-233983437.jpg"
-              class="img-fluid d-block rounded-2"
-              alt="Hero Laptop"
-            />
-          </div>
-        </div>
-      </div>
-    </section>
-    <BaseCard></BaseCard>
-    <Footer></Footer>
-  </template>
   <Navbar />
   <!-- HERO SECTION -->
   <section class="hero-section" style="position: relative;">
@@ -149,76 +103,7 @@
 
     </div>
   </section>
-
-  <!-- CATEGORY SECTION -->
-  <section class="py-5 bg-light">
-
-    <div class="container">
-
-      <div class="text-center mb-5">
-
-        <h2 class="fw-bold">
-          ប្រភេទផលិតផលពេញនិយម
-        </h2>
-
-        <p class="text-muted">
-          ជ្រើសរើសប្រភេទផលិតផលដែលអ្នកចង់បាន
-        </p>
-
-      </div>
-
-      <div class="row g-4">
-
-        <div class="col-6 col-md-4 col-lg-2">
-          <div class="category-card">
-            <i class="bi bi-phone category-icon"></i>
-            <p class="mb-0 mt-3">ទូរស័ព្ទ</p>
-          </div>
-        </div>
-
-        <div class="col-6 col-md-4 col-lg-2">
-          <div class="category-card">
-            <i class="bi bi-laptop category-icon"></i>
-            <p class="mb-0 mt-3">Laptop</p>
-          </div>
-        </div>
-
-        <div class="col-6 col-md-4 col-lg-2">
-          <div class="category-card">
-            <i class="bi bi-controller category-icon"></i>
-            <p class="mb-0 mt-3">Gaming</p>
-          </div>
-        </div>
-
-        <div class="col-6 col-md-4 col-lg-2">
-          <div class="category-card">
-            <i class="bi bi-bag category-icon"></i>
-            <p class="mb-0 mt-3">Fashion</p>
-          </div>
-        </div>
-
-        <div class="col-6 col-md-4 col-lg-2">
-          <div class="category-card">
-            <i class="bi bi-house-door category-icon"></i>
-            <p class="mb-0 mt-3">ផ្ទះ</p>
-          </div>
-        </div>
-
-        <div class="col-6 col-md-4 col-lg-2">
-          <div class="category-card">
-            <i class="bi bi-watch category-icon"></i>
-            <p class="mb-0 mt-3">Accessories</p>
-          </div>
-        </div>
-
-      </div>
-
-    </div>
-
-  </section>
-
   <BaseCard />
-
   <Footer />
   
 
@@ -240,6 +125,7 @@
 }
 
 .hero-section {
+  margin-bottom: 0px !important;
   position: relative;
   background: linear-gradient(to right, #f8fbff, #eef5ff);
   padding: 120px 0;
