@@ -110,8 +110,7 @@
     // 🛠️ សម្អាត៖ ទុកការ Import តែម្តងគត់នៅខាងលើ និងលុបការប្រកាសបាតកូដចោល
     import { useCart } from '@/stores/addToCart';
     // ស្វែងរកផ្នែក onMounted ក្នុង Navbar.vue រួចកែដូចខាងក្រោម៖
-    onMounted(async () => {
-        // ទាញយកទិន្នន័យផលិតផល
+    onMounted(async () => {// ទាញយកទិន្នន័យផលិតផល
         await productStore.fetchProduct();
         
         // 🛠️ បន្ថែមថ្មី៖ ទាញយកទិន្នន័យកន្ត្រកទំនិញពី API/LocalStorage មកបង្ហាញលើ Badge
